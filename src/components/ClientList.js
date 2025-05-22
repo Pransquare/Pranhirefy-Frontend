@@ -289,7 +289,7 @@ export default function ClientList() {
 
         <button
           className="btn btn-primary ms-auto d-flex align-items-center gap-2"
-          onClick={() => navigate("/add")}
+          onClick={() => navigate("/clients/add")}
         >
           <FaPlus /> Add Client
         </button>
@@ -316,14 +316,14 @@ export default function ClientList() {
                 <td>
                   <button
                     className="icon-button text-primary hover-view me-2"
-                    onClick={() => navigate(`/view/${c.clientId}`)}
+                    onClick={() => navigate(`/clients/view/${c.clientId}`)}
                     title="View"
                   >
                     <FaEye />
                   </button>
                   <button
                     className="icon-button text-warning hover-edit me-2"
-                    onClick={() => navigate(`/edit/${c.clientId}`)}
+                    onClick={() => navigate(`/clients/edit/${c.clientId}`)}
                     title="Edit"
                   >
                     <FaEdit />

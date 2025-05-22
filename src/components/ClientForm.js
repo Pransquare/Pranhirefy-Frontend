@@ -92,7 +92,7 @@ export default function ClientForm() {
       } else {
         await createClient(client);
       }
-      navigate("/");
+      navigate("/clients");
     } catch (err) {
       console.error("Error response:", err.response);
 
@@ -196,7 +196,7 @@ export default function ClientForm() {
             <button
               type="button"
               className="btn btn-secondary px-4 me-2"
-              onClick={() => navigate("/")}
+              onClick={() => navigate("/clients")}
             >
               Cancel
             </button>

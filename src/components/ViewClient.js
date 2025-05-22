@@ -55,14 +55,14 @@ export default function ViewClient() {
         <div className="mt-4 d-flex justify-content-between">
           <button
             className="btn btn-outline-primary"
-            onClick={() => navigate("/")}
+            onClick={() => navigate("/clients")}
           >
             ← Back to Client List
           </button>
 
           <button
             className="btn btn-primary"
-            onClick={() => navigate(`/edit/${client.clientId}`)}
+            onClick={() => navigate(`/clients/edit/${client.clientId}`)}
           >
             ✎ Edit
           </button>
