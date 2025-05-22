@@ -1,10 +1,26 @@
 import axios from "axios";
 
-const API_BASE = "http://localhost:8081/api/clients";
+const API_BASE_URL = "http://localhost:8080/clients";
 
-export const getClients = () => axios.get(`${API_BASE}/getAllClients`);
-export const getClientById = (id) => axios.get(`${API_BASE}/${id}`);
-export const createClient = (client) => axios.post(API_BASE, client);
-export const updateClient = (id, client) =>
-  axios.put(`${API_BASE}/${id}`, client);
-export const deleteClient = (id) => axios.delete(`${API_BASE}/${id}`);
+export function getClients() {
+  // This hits GET /clients/all to get all non-deleted clients
+  return axios.get(`${API_BASE_URL}/all`);
+}
+
+export function deleteClient(clientId) {
+  // This hits DELETE /clients/delete/{id} for soft delete
+  return axios.delete(`${API_BASE_URL}/delete/${clientId}`);
+}
+
+// Optionally add create and update if you need them later
+export function createClient(clientData) {
+  return axios.post(`${API_BASE_URL}/create`, clientData);
+}
+
+export function updateClient(clientId, clientData) {
+  return axios.put(`${API_BASE_URL}/update/${clientId}`, clientData);
+}
+
+export function getClientById(clientId) {
+  return axios.get(`${API_BASE_URL}/${clientId}`);
+}

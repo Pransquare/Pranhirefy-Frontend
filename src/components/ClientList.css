@@ -1,0 +1,34 @@
+.icon-button {
+  background: none;
+  border: none;
+  padding: 6px;
+  border-radius: 6px;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  font-size: 1.1rem;
+}
+
+/* Always show specific icon colors */
+.icon-button.text-primary {
+  color: #007bff;
+}
+
+.icon-button.text-warning {
+  color: #ffc107;
+}
+
+.icon-button.text-danger {
+  color: #dc3545;
+}
+
+/* Hover backgrounds + override icon color if needed */
+.icon-button.hover-view:hover {
+  background-color: rgb(231, 229, 229);
+}
+
+.icon-button.hover-edit:hover {
+  background-color: rgb(231, 229, 229);
+}
+
+.icon-button.hover-delete:hover {
+  background-color: rgb(231, 229, 229);
+}

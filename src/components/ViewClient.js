@@ -1,3 +1,4 @@
+// ViewClient.jsx - Styled client detail view
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { getClientById } from "../services/clientService";
@@ -13,7 +14,8 @@ export default function ViewClient() {
     });
   }, [id]);
 
-  if (!client) return <div className="container mt-4">Loading...</div>;
+  if (!client)
+    return <div className="container mt-5">Loading client details...</div>;
 
   const fields = [
     { label: "Client ID", value: client.clientId },
@@ -33,21 +35,39 @@ export default function ViewClient() {
   ];
 
   return (
-    <div className="container mt-4">
-      <h2>Client Details</h2>
-      <div className="row">
-        {fields.map((field, index) => (
-          <div className="col-md-6 mb-3" key={index}>
-            <div className="border p-3 rounded bg-light">
-              <strong>{field.label}:</strong> <br />
-              {field.value || "N/A"}
+    <div className="container mt-5">
+      <div className="card shadow-lg p-4">
+        <h2 className="mb-4 text-primary">Client Details</h2>
+
+        <div className="row g-3">
+          {fields.map((field, index) => (
+            <div className="col-md-6" key={index}>
+              <div className="bg-light border rounded p-3 h-100">
+                <h6 className="text-muted mb-1">{field.label}</h6>
+                <p className="mb-0 fw-semibold text-dark">
+                  {field.value || "N/A"}
+                </p>
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
+
+        <div className="mt-4 d-flex justify-content-between">
+          <button
+            className="btn btn-outline-primary"
+            onClick={() => navigate("/")}
+          >
+            ← Back to Client List
+          </button>
+
+          <button
+            className="btn btn-primary"
+            onClick={() => navigate(`/edit/${client.clientId}`)}
+          >
+            ✎ Edit
+          </button>
+        </div>
       </div>
-      <button className="btn btn-secondary" onClick={() => navigate("/")}>
-        ← Back to List
-      </button>
     </div>
   );
 }
