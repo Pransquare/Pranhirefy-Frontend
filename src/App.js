@@ -65,12 +65,39 @@ import CreateGoal from "./components/CreateGoal";
 import GoalDetails from "./components/GoalDetails";
 import EditGoal from "./components/EditGoal";
 
+
+
+
+import LoginPage from './components/LoginPageComponent';
+
+import DashboardMain from './components/MainDashboard';
+import DesignationFormComponent from './components/Designation/DesignationComponent';
+import DesignationDetails from './components/Designation/DesignationDetails';
+import AddDesignationComponent from './components/Designation/AddDesignation';
+
 function App() {
   return (
     <Router>
       <Routes>
         {/* Home Page with navigation buttons */}
-        <Route path="/" element={<HomePage />} />
+        {/* <Route path="/" element={<HomePage />} /> */}
+{/* Login and Designation Routes */}
+         <Route path="/" element={<Navigate to="/login" replace />} />
+
+        <Route path="/login" element={<LoginPage />} />
+      
+        <Route path="/admin" element={<DashboardMain />} />
+        <Route path="/hr" element={<DashboardMain />} />
+        <Route path="/employee" element={<DashboardMain />} />
+        <Route path="/manager" element={<DashboardMain />} />
+        <Route path="/budget" element={<DashboardMain />} />
+        <Route path="/designation" element={<DesignationFormComponent />} />
+       
+        <Route path="/designation/:id" element={<DesignationDetails />} />
+         <Route path="/add-designation" element={<AddDesignationComponent />} />
+    
+
+
         {/* Client Routes */}
         <Route path="/clients" element={<ClientList />} />
         <Route path="/clients/add" element={<ClientForm />} />
@@ -105,6 +132,9 @@ function App() {
         <Route path="/goal/add-goal" element={<CreateGoal />} />
         <Route path="/goal/goal/:id" element={<GoalDetails />} />
         <Route path="/goal/edit-goal/:id" element={<EditGoal />} />
+
+
+         
       </Routes>
     </Router>
   );

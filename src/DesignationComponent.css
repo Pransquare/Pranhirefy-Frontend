@@ -1,0 +1,65 @@
+
+
+.action-button {
+  background-color: white;
+  border: 2px solid transparent;
+  transition: all 0.3s ease;
+  padding: 10px 14px; /* a bit bigger padding */
+  border-radius: 12px;
+  font-size: 0.9rem; /* bigger icons */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  margin-right: 20px; /* space between buttons */
+}
+
+.action-button:last-child {
+  margin-right: 0; /* no margin after last button */
+}
+
+/* Hover effect: slight scale and subtle background */
+.action-button:hover {
+  transform: scale(1.15);
+  background-color: rgba(0, 0, 0, 0.05);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+}
+
+/* View Button */
+.view-button {
+  color: #2a9df4; /* stronger pastel blue */
+  border-color: #81b7e6;
+  
+  
+}
+.view-button:hover {
+  color: #fcfcfd; /* bootstrap primary blue */
+  border-color: #0d6efd;
+  background-color: #0d6efd;
+
+}
+
+/* Edit Button */
+.edit-button {
+  color: #d4af37; /* golden */
+  border-color: #f0d36d;
+  margin-left: 15px;;
+}
+.edit-button:hover {
+  color: #fcfcfd; ; /* bright gold */
+  border-color: #ffb300;
+   background-color:#ffb300;
+}
+
+/* Delete Button */
+.delete-button {
+  color: #e55353; /* softer red */
+  border-color: #f8a1a1;
+  margin-left: 15px;;
+}
+.delete-button:hover {
+color: #fcfcfd;  /* bootstrap danger red */
+  border-color: #dc3545;
+  background-color:#dc3545 ;
+}
