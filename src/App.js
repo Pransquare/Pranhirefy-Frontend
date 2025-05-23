@@ -39,6 +39,11 @@ import ViewClient from "./components/ViewClient";
 import LeaveTypeList from './components/LeaveTypeList';
 import ViewLeaveType from './components/ViewLeaveType';
 import AddLeaveTypeForm from './components/AddLeaveTypeForm';
+import ProjectList from "./components/ProjectList";
+import AddProject from "./components/AddProject"; // You need to create this
+import ViewProject from "./components/ViewProject";       // Optional: for viewing details
+import EditProjectForm from "./components/EditProjectForm";
+
 
 function App() {
   return (
@@ -58,6 +63,14 @@ function App() {
         <Route path="/leavetypes/add" element={<AddLeaveTypeForm />} />
         <Route path="/leavetypes/edit/:id" element={<AddLeaveTypeForm />} />
         <Route path="/leavetypes/view/:id" element={<ViewLeaveType />} />
+
+        {/* Project Type Routes */}
+        <Route path="/" element={<Navigate to="/projects" replace />} />
+        <Route path="/projects" element={<ProjectList />} />
+        <Route path="/projects/add" element={<AddProject />} />
+        <Route path="/projects/view/:id" element={<ViewProject />} />
+        <Route path="/projects/edit/:id" element={<EditProjectForm />} />
+        
       </Routes>
     </Router>
   );
