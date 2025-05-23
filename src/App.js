@@ -39,6 +39,9 @@ import ViewClient from "./components/ViewClient";
 import LeaveTypeList from './components/LeaveTypeList';
 import ViewLeaveType from './components/ViewLeaveType';
 import AddLeaveTypeForm from './components/AddLeaveTypeForm';
+import MasterReleaseNotesList from "./components/MasterReleaseNotesList";
+import MasterReleaseNotesForm from "./components/MasterReleaseNotesForm";
+import ViewReleaseNote from "./components/ViewReleaseNote";
 
 function App() {
   return (
@@ -59,8 +62,16 @@ function App() {
         <Route path="/leavetypes/edit/:id" element={<AddLeaveTypeForm />} />
         <Route path="/leavetypes/view/:id" element={<ViewLeaveType />} />
       </Routes>
+    {/*Release Notes Routes */}
+      <Routes>
+        <Route path="/releaseNote" element={<MasterReleaseNotesList />} />
+        <Route path="/releaseNote/add" element={<MasterReleaseNotesForm />} />
+        <Route path="/releaseNote/edit/:id" element={<MasterReleaseNotesForm />} />
+        <Route path="/releaseNote/view/:id" element={<ViewReleaseNote />} />
+      </Routes>
     </Router>
   );
 }
 
 export default App;
+
