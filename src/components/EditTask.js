@@ -4,7 +4,6 @@ import taskService from "../services/taskService";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../tasklist.css";
 
-
 function EditTask() {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -35,7 +34,7 @@ function EditTask() {
       .updateTask(task.taskId, task)
       .then(() => {
         setSuccessMessage("Task updated successfully!");
-        setTimeout(() => navigate("/"), 2000);
+        setTimeout(() => navigate("/tasks"), 2000);
       })
       .catch((err) => {
         console.error("Error updating task", err);
@@ -97,7 +96,7 @@ function EditTask() {
             <button
               type="button"
               className="btn btn-secondary"
-              onClick={() => navigate("/")}
+              onClick={() => navigate("/tasks")}
             >
               Cancel
             </button>

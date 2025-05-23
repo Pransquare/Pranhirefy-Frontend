@@ -58,14 +58,14 @@ function TaskDetails() {
           <div className="d-flex justify-content-between">
             <button
               className="btn btn-secondary d-flex align-items-center gap-2"
-              onClick={() => navigate("/")}
+              onClick={() => navigate("/tasks")}
             >
               <FiArrowLeft />
               Back to List
             </button>
             <button
               className="btn btn-warning d-flex align-items-center gap-2"
-              onClick={() => navigate(`/edit-task/${task.taskId}`)}
+              onClick={() => navigate(`/tasks/edit-task/${task.taskId}`)}
             >
               <FiEdit />
               Edit Task

@@ -4,7 +4,6 @@ import taskService from "../services/taskService";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../tasklist.css";
 
-
 function AddTask() {
   const [taskCode, setTaskCode] = useState("");
   const [taskDescription, setTaskDescription] = useState("");
@@ -28,7 +27,7 @@ function AddTask() {
 
         // Navigate back to task list after a short delay (optional)
         setTimeout(() => {
-          navigate("/");
+          navigate("/tasks");
         }, 2000);
       })
       .catch((error) => {
@@ -98,7 +97,7 @@ function AddTask() {
             <button
               type="button"
               className="btn btn-secondary"
-              onClick={() => navigate("/")}
+              onClick={() => navigate("/tasks")}
             >
               Cancel
             </button>
