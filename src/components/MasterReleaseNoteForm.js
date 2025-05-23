@@ -4,7 +4,7 @@ import {
   createReleaseNote,
   getReleaseNoteById,
   updateReleaseNote,
-} from "././services/releaseNotesService";
+} from "../services/releaseNoteService";
 
 const MasterReleaseNotesForm = () => {
   const [note, setNote] = useState({
@@ -24,7 +24,16 @@ const MasterReleaseNotesForm = () => {
   useEffect(() => {
     if (id) {
       getReleaseNoteById(id).then((res) => {
-        const { fileName, releaseName, releaseVersion, releaseDate, status, uploadedPath, createdBy, modifiedBy } = res.data;
+        const {
+          fileName,
+          releaseName,
+          releaseVersion,
+          releaseDate,
+          status,
+          uploadedPath,
+          createdBy,
+          modifiedBy,
+        } = res.data;
         setNote({
           fileName,
           releaseName,
@@ -50,11 +59,11 @@ const MasterReleaseNotesForm = () => {
     } else {
       await createReleaseNote(note); // Backend auto-handles createdBy and createdDate
     }
-    navigate("/releaseNote");
+    navigate("/relaseNote");
   };
 
   const handleCancel = () => {
-    navigate("/releaseNote");
+    navigate("/relaseNote");
   };
 
   return (
@@ -62,7 +71,9 @@ const MasterReleaseNotesForm = () => {
       <h2>{id ? "Edit" : "Add"} Release Note</h2>
       <form onSubmit={handleSubmit} className="mt-3">
         <div className="mb-3">
-          <label htmlFor="fileName" className="form-label">File Name</label>
+          <label htmlFor="fileName" className="form-label">
+            File Name
+          </label>
           <input
             id="fileName"
             name="fileName"
@@ -75,7 +86,9 @@ const MasterReleaseNotesForm = () => {
         </div>
 
         <div className="mb-3">
-          <label htmlFor="releaseName" className="form-label">Release Name</label>
+          <label htmlFor="releaseName" className="form-label">
+            Release Name
+          </label>
           <input
             id="releaseName"
             name="releaseName"
@@ -88,7 +101,9 @@ const MasterReleaseNotesForm = () => {
         </div>
 
         <div className="mb-3">
-          <label htmlFor="releaseVersion" className="form-label">Release Version</label>
+          <label htmlFor="releaseVersion" className="form-label">
+            Release Version
+          </label>
           <input
             id="releaseVersion"
             name="releaseVersion"
@@ -101,7 +116,9 @@ const MasterReleaseNotesForm = () => {
         </div>
 
         <div className="mb-3">
-          <label htmlFor="releaseDate" className="form-label">Release Date</label>
+          <label htmlFor="releaseDate" className="form-label">
+            Release Date
+          </label>
           <input
             type="date"
             id="releaseDate"
@@ -114,7 +131,9 @@ const MasterReleaseNotesForm = () => {
         </div>
 
         <div className="mb-3">
-          <label htmlFor="status" className="form-label">Status</label>
+          <label htmlFor="status" className="form-label">
+            Status
+          </label>
           <input
             id="status"
             name="status"
@@ -126,7 +145,9 @@ const MasterReleaseNotesForm = () => {
         </div>
 
         <div className="mb-3">
-          <label htmlFor="uploadedPath" className="form-label">Upload File</label>
+          <label htmlFor="uploadedPath" className="form-label">
+            Upload File
+          </label>
           <input
             type="file"
             id="uploadedPath"
@@ -148,7 +169,9 @@ const MasterReleaseNotesForm = () => {
 
         {!id && (
           <div className="mb-3">
-            <label htmlFor="createdBy" className="form-label">Created By</label>
+            <label htmlFor="createdBy" className="form-label">
+              Created By
+            </label>
             <input
               id="createdBy"
               name="createdBy"
@@ -161,7 +184,9 @@ const MasterReleaseNotesForm = () => {
 
         {id && (
           <div className="mb-3">
-            <label htmlFor="modifiedBy" className="form-label">Modified By</label>
+            <label htmlFor="modifiedBy" className="form-label">
+              Modified By
+            </label>
             <input
               id="modifiedBy"
               name="modifiedBy"
@@ -178,7 +203,11 @@ const MasterReleaseNotesForm = () => {
           <button type="submit" className="btn btn-success">
             {id ? "Update" : "Submit"}
           </button>
-          <button type="button" className="btn btn-secondary" onClick={handleCancel}>
+          <button
+            type="button"
+            className="btn btn-secondary"
+            onClick={handleCancel}
+          >
             Cancel
           </button>
         </div>

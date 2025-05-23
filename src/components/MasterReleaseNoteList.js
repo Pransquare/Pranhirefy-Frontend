@@ -1,7 +1,17 @@
 import React, { useEffect, useState } from "react";
-import { getAllReleaseNotes, deleteReleaseNote } from "././services/releaseNotesService";
+import {
+  getAllReleaseNotes,
+  deleteReleaseNote,
+} from "../services/releaseNoteService";
 import { Link } from "react-router-dom";
-import { FaEdit, FaTrash, FaEye, FaPlus, FaChevronLeft, FaChevronRight } from "react-icons/fa";
+import {
+  FaEdit,
+  FaTrash,
+  FaEye,
+  FaPlus,
+  FaChevronLeft,
+  FaChevronRight,
+} from "react-icons/fa";
 
 const MasterReleaseNotesList = () => {
   const [releaseNotes, setReleaseNotes] = useState([]);
@@ -98,7 +108,7 @@ const MasterReleaseNotesList = () => {
       </div>
 
       <div className="d-flex justify-content-end mb-3">
-        <Link to="/add/releaseNote" className="btn btn-primary">
+        <Link to="/relaseNote/add" className="btn btn-primary">
           <FaPlus className="me-2" /> Add Release Note
         </Link>
       </div>
@@ -141,10 +151,16 @@ const MasterReleaseNotesList = () => {
                 <td>{note.status}</td>
                 <td>{note.releaseDate}</td>
                 <td>
-                  <Link to={`/releaseNote/edit/${note.id}`} className="btn btn-outline-warning btn-sm mx-1">
+                  <Link
+                    to={`/relaseNote/edit/${note.id}`}
+                    className="btn btn-outline-warning btn-sm mx-1"
+                  >
                     <FaEdit />
                   </Link>
-                  <Link to={`/releaseNote/view/${note.id}`} className="btn btn-outline-info btn-sm mx-1">
+                  <Link
+                    to={`/relaseNote/view/${note.id}`}
+                    className="btn btn-outline-info btn-sm mx-1"
+                  >
                     <FaEye />
                   </Link>
                   <button
@@ -197,21 +213,37 @@ const MasterReleaseNotesList = () => {
       )}
 
       {showModal && (
-        <div className="modal fade show d-block" tabIndex="-1" style={{ backgroundColor: "rgba(0,0,0,0.5)" }}>
+        <div
+          className="modal fade show d-block"
+          tabIndex="-1"
+          style={{ backgroundColor: "rgba(0,0,0,0.5)" }}
+        >
           <div className="modal-dialog">
             <div className="modal-content">
               <div className="modal-header">
                 <h5 className="modal-title">Confirm Delete</h5>
-                <button type="button" className="btn-close" onClick={() => setShowModal(false)}></button>
+                <button
+                  type="button"
+                  className="btn-close"
+                  onClick={() => setShowModal(false)}
+                ></button>
               </div>
               <div className="modal-body">
                 <p>Are you sure you want to delete this release note?</p>
               </div>
               <div className="modal-footer">
-                <button type="button" className="btn btn-secondary" onClick={() => setShowModal(false)}>
+                <button
+                  type="button"
+                  className="btn btn-secondary"
+                  onClick={() => setShowModal(false)}
+                >
                   Cancel
                 </button>
-                <button type="button" className="btn btn-danger" onClick={handleDelete}>
+                <button
+                  type="button"
+                  className="btn btn-danger"
+                  onClick={handleDelete}
+                >
                   Delete
                 </button>
               </div>

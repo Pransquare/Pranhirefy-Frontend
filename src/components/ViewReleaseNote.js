@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import { getReleaseNoteById } from "././services/releaseNotesService";
+import { getReleaseNoteById } from "../services/releaseNoteService";
 import { FaArrowLeft, FaEdit, FaInfoCircle } from "react-icons/fa";
 
 const ViewReleaseNote = () => {
@@ -131,11 +131,14 @@ const ViewReleaseNote = () => {
           </div>
 
           <div className="mt-4 d-flex justify-content-between">
-            <Link to="/releaseNote" className="btn btn-outline-primary">
+            <Link to="/relaseNote" className="btn btn-outline-primary">
               <FaArrowLeft className="me-2" />
               Back to List
             </Link>
-            <Link to={`/releaseNote/edit/${id}`} className="btn btn-outline-warning">
+            <Link
+              to={`/relaseNote/edit/${id}`}
+              className="btn btn-outline-warning"
+            >
               <FaEdit className="me-2" />
               Edit
             </Link>
