@@ -1,18 +1,16 @@
-
-
-
-import React, { useState, useEffect } from 'react';
-import { getAllGoals, softDeleteGoal } from '../servcice/serviceGoal';
-import { useNavigate } from 'react-router-dom';
-import { FaEdit, FaEye, FaTrash } from 'react-icons/fa';
-import './ListGoals.css'; 
+import React, { useState, useEffect } from "react";
+// import { getAllGoals, softDeleteGoal } from '../servcice/serviceGoal';
+import { getAllGoals, softDeleteGoal } from "../services/serviceGoals";
+import { useNavigate } from "react-router-dom";
+import { FaEdit, FaEye, FaTrash } from "react-icons/fa";
+import "./ListGoals.css";
 
 const ITEMS_PER_PAGE = 5;
 
 const ListGoals = () => {
   const [goals, setGoals] = useState([]);
   const [filteredGoals, setFilteredGoals] = useState([]);
-  const [searchText, setSearchText] = useState('');
+  const [searchText, setSearchText] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const navigate = useNavigate();
 
@@ -24,7 +22,7 @@ const ListGoals = () => {
         setGoals(response.data);
         setFilteredGoals(response.data);
       } catch (error) {
-        console.error('Failed to fetch goals:', error);
+        console.error("Failed to fetch goals:", error);
       }
     };
     fetchGoals();
@@ -38,7 +36,7 @@ const ListGoals = () => {
       setGoals(updated.data);
       setFilteredGoals(updated.data);
     } catch (error) {
-      console.error('Failed to delete goal:', error);
+      console.error("Failed to delete goal:", error);
     }
   };
 
@@ -56,13 +54,13 @@ const ListGoals = () => {
   };
 
   const handleClearSearch = () => {
-    setSearchText('');
+    setSearchText("");
     setFilteredGoals(goals);
     setCurrentPage(1);
   };
 
   const handleAddGoal = () => {
-    navigate('/goal/add-goal');
+    navigate("/goal/add-goal");
   };
 
   // Pagination logic
@@ -75,7 +73,9 @@ const ListGoals = () => {
     <div className="container mt-4">
       <div className="card shadow">
         <div className="card-header">
-          <h4 className="mb-0 text-center mb-3">Goal Management</h4>
+          <h4 className="mb-0 text-center mb-3 text-primary">
+            Goal Management
+          </h4>
           <div className="d-flex">
             <input
               type="text"
@@ -84,7 +84,10 @@ const ListGoals = () => {
               value={searchText}
               onChange={handleSearch}
             />
-            <button className="btn btn-secondary me-2" onClick={handleClearSearch}>
+            <button
+              className="btn btn-secondary me-2"
+              onClick={handleClearSearch}
+            >
               Clear
             </button>
             <button className="btn btn-primary" onClick={handleAddGoal}>
@@ -96,7 +99,7 @@ const ListGoals = () => {
         <div className="card-body">
           <div className="table-responsive">
             <table className="table  table-bordered">
-              <thead >
+              <thead>
                 <tr>
                   <th>ID</th>
                   <th>Goal Code</th>
@@ -139,7 +142,7 @@ const ListGoals = () => {
                             </button>
                           )} */}
 
-{/* 
+                          {/* 
  <button
   className="btn  btn-sm me-2 icon-hover"
   title="View"
@@ -148,43 +151,42 @@ const ListGoals = () => {
   <FaEye />
 </button> */}
 
-<div className='d-flex justify-content-between'>
-  <div>
- <button
-  className="btn  btn-sm me-2 icon-hover"
-  title="View"
-  onClick={() => navigate(`/goal/goal/${goal.goalId}`)}
->
-  <FaEye />
-</button>
-</div>
-  <div>
-    
-<button
-  className="btn btn-sm me-2 icon-hover"
-  title="Edit"
-  onClick={() => navigate(`/goal/edit-goal/${goal.goalId}`)}
->
-  <FaEdit />
-</button>
-
-  </div>
-  <div>
-
-    
-{goal.deleted !== 'Yes' && (
-  <button
-    className="btn  btn-sm icon-hover"
-    title="Delete"
-    onClick={() => handleDelete(goal.goalId)}
-  >
-    <FaTrash />
-  </button>
-)}
-
-  </div>
-</div>
-{/* 
+                          <div className="d-flex justify-content-between">
+                            <div>
+                              <button
+                                className="btn  btn-sm me-2 icon-hover btn-primary"
+                                title="View"
+                                onClick={() =>
+                                  navigate(`/goal/goal/${goal.goalId}`)
+                                }
+                              >
+                                <FaEye />
+                              </button>
+                            </div>
+                            <div>
+                              <button
+                                className="btn btn-sm me-2 icon-hover btn-warning"
+                                title="Edit"
+                                onClick={() =>
+                                  navigate(`/goal/edit-goal/${goal.goalId}`)
+                                }
+                              >
+                                <FaEdit />
+                              </button>
+                            </div>
+                            <div>
+                              {goal.deleted !== "Yes" && (
+                                <button
+                                  className="btn  btn-sm icon-hover btn-danger"
+                                  title="Delete"
+                                  onClick={() => handleDelete(goal.goalId)}
+                                >
+                                  <FaTrash />
+                                </button>
+                              )}
+                            </div>
+                          </div>
+                          {/* 
 <button
   className="btn btn-sm me-2 icon-hover"
   title="Edit"
@@ -192,7 +194,7 @@ const ListGoals = () => {
 >
   <FaEdit />
 </button> */}
-{/* 
+                          {/* 
 {goal.deleted !== 'Yes' && (
   <button
     className="btn  btn-sm icon-hover"
@@ -202,9 +204,6 @@ const ListGoals = () => {
     <FaTrash />
   </button>
 )} */}
-
-
-
                         </div>
                       </td>
                     </tr>
@@ -234,7 +233,9 @@ const ListGoals = () => {
             </span>
             <button
               className="btn btn-outline-secondary"
-              onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+              onClick={() =>
+                setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+              }
               disabled={currentPage === totalPages}
             >
               Next &raquo;
@@ -247,6 +248,3 @@ const ListGoals = () => {
 };
 
 export default ListGoals;
-
-
-

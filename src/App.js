@@ -59,6 +59,12 @@ import MasterReleaseNotesList from "./components/MasterReleaseNoteList";
 import MasterReleaseNotesForm from "./components/MasterReleaseNoteForm";
 import ViewReleaseNote from "./components/ViewReleaseNote";
 
+import ListGoals from "./components/ListGoals";
+
+import CreateGoal from "./components/CreateGoal";
+import GoalDetails from "./components/GoalDetails";
+import EditGoal from "./components/EditGoal";
+
 function App() {
   return (
     <Router>
@@ -94,6 +100,11 @@ function App() {
           element={<MasterReleaseNotesForm />}
         />
         <Route path="/relaseNote/view/:id" element={<ViewReleaseNote />} />
+        {/*Goals Routes */}
+        <Route path="/goal" element={<ListGoals />} />
+        <Route path="/goal/add-goal" element={<CreateGoal />} />
+        <Route path="/goal/goal/:id" element={<GoalDetails />} />
+        <Route path="/goal/edit-goal/:id" element={<EditGoal />} />
       </Routes>
     </Router>
   );

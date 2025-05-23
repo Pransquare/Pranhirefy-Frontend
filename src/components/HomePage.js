@@ -20,6 +20,10 @@ const HomePage = () => {
   const goToProjects = () => {
     navigate("/projects");
   };
+
+  const goToGoals = () => {
+    navigate("/goal");
+  };
   return (
     <div className="container mt-5">
       <h2 className="mb-4">Welcome to the Dashboard</h2>
@@ -30,7 +34,9 @@ const HomePage = () => {
         <button className="btn btn-primary" onClick={goToLeaveTypes}>
           Leave Type Details
         </button>
-        <button className="btn btn-success">Goal Details</button>
+        <button className="btn btn-success" onClick={goToGoals}>
+          Goal Details
+        </button>
         <button className="btn btn-primary" onClick={goToReleaseNotes}>
           ReleaseNotes Details
         </button>

@@ -1,16 +1,17 @@
+import React, { useState, useEffect } from "react";
+// import { updateGoal, getAllGoals } from "../service/serviceGoal";
 
-import React, { useState, useEffect } from 'react';
-import { updateGoal, getAllGoals } from '../servcice/serviceGoal';
-import { useParams, useNavigate } from 'react-router-dom';
-import { MdArrowBack } from 'react-icons/md'; // Optional icon for the back button
+import { updateGoal, getAllGoals } from "../services/serviceGoals";
+import { useParams, useNavigate } from "react-router-dom";
+import { MdArrowBack } from "react-icons/md"; // Optional icon for the back button
 
 const EditGoal = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const goalId = parseInt(id);
 
-  const [goalCode, setGoalCode] = useState('');
-  const [goal, setGoal] = useState('');
+  const [goalCode, setGoalCode] = useState("");
+  const [goal, setGoal] = useState("");
 
   useEffect(() => {
     const fetchGoal = async () => {
@@ -20,7 +21,7 @@ const EditGoal = () => {
         setGoalCode(goalToEdit.goalCode);
         setGoal(goalToEdit.goal);
       } catch (error) {
-        console.error('Failed to fetch goal:', error);
+        console.error("Failed to fetch goal:", error);
       }
     };
     fetchGoal();
@@ -32,18 +33,18 @@ const EditGoal = () => {
 
     try {
       await updateGoal(goalId, updatedGoal);
-      navigate('/goal'); // Redirect back to goal list after successful update
+      navigate("/goal"); // Redirect back to goal list after successful update
     } catch (error) {
-      console.error('Failed to update goal:', error);
+      console.error("Failed to update goal:", error);
     }
   };
 
   const handleCancel = () => {
-    navigate('/goal'); // Navigate back to the list page without saving
+    navigate("/goal"); // Navigate back to the list page without saving
   };
 
   const handleGoBack = () => {
-    navigate('/goal'); // Go back to the list of goals
+    navigate("/goal"); // Go back to the list of goals
   };
 
   return (
@@ -55,7 +56,9 @@ const EditGoal = () => {
         <div className="card-body">
           <form onSubmit={handleSubmit}>
             <div className="mb-3">
-              <label htmlFor="goalCode" className="form-label">Goal Code</label>
+              <label htmlFor="goalCode" className="form-label">
+                Goal Code
+              </label>
               <input
                 id="goalCode"
                 type="text"
@@ -66,7 +69,9 @@ const EditGoal = () => {
               />
             </div>
             <div className="mb-3">
-              <label htmlFor="goal" className="form-label">Goal</label>
+              <label htmlFor="goal" className="form-label">
+                Goal
+              </label>
               <input
                 id="goal"
                 type="text"
@@ -79,8 +84,16 @@ const EditGoal = () => {
           </form>
         </div>
         <div className="card-footer text-center">
-          <button className="btn btn-primary me-2" type="submit" onClick={handleSubmit}>Save</button>
-          <button className="btn btn-secondary me-2" onClick={handleCancel}>Cancel</button>
+          <button
+            className="btn btn-primary me-2"
+            type="submit"
+            onClick={handleSubmit}
+          >
+            Save
+          </button>
+          <button className="btn btn-secondary me-2" onClick={handleCancel}>
+            Cancel
+          </button>
           <button className="btn btn-warning" onClick={handleGoBack}>
             <MdArrowBack className="me-1" /> Go Back
           </button>

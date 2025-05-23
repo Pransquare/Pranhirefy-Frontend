@@ -1,8 +1,7 @@
-
-
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { getAllGoals, updateGoal } from "../servcice/serviceGoal";
+// import { getAllGoals, updateGoal } from "../servcice/serviceGoal";
+import { getAllGoals, updateGoal } from "../services/serviceGoals";
 import { MdArrowBack } from "react-icons/md"; // Arrow Back icon
 
 const GoalDetails = () => {
@@ -37,7 +36,7 @@ const GoalDetails = () => {
       await updateGoal(goal.goalId, goal);
       alert("Goal updated successfully.");
       setEditable(false);
-      navigate("/goal")
+      navigate("/goal");
     } catch (error) {
       console.error("Failed to save goal:", error);
     }
@@ -162,9 +161,3 @@ const GoalDetails = () => {
 };
 
 export default GoalDetails;
-
-
-
-
-
-
