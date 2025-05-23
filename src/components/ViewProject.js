@@ -36,12 +36,15 @@ const ViewProject = () => {
     );
   }
 
-  const formatDate = (date) => (date ? new Date(date).toLocaleDateString() : "N/A");
+  const formatDate = (date) =>
+    date ? new Date(date).toLocaleDateString() : "N/A";
 
   return (
     <div className="container mt-4">
       <div className="card shadow p-4">
-        <h4 className="text-primary fw-bold mb-4 text-center ">Project Details</h4>
+        <h4 className="text-primary fw-bold mb-4 text-center ">
+          Project Details
+        </h4>
         <div className="row">
           {[
             ["Project ID", project.project_master_id],
@@ -56,25 +59,27 @@ const ViewProject = () => {
             ["Client Code", project.client_code],
             ["Start Date", formatDate(project.start_date)],
             ["End Date", formatDate(project.end_date)],
-            ["Deleted", project.deleted],
           ].map(([label, value], i) => (
             <div className="col-md-6 mb-3 border rounded p-2" key={i}>
               <label className="fw-semibold">{label}</label>
               <div className="bg-light p-2 mt-1">{value || "N/A"}</div>
             </div>
-
-
           ))}
         </div>
 
         <div className="d-flex justify-content-between mt-4">
-          <button className="btn btn-secondary" onClick={() => navigate("/projects")}>
+          <button
+            className="btn btn-secondary"
+            onClick={() => navigate("/projects")}
+          >
             <FaArrowLeft className="me-2" />
             Back
           </button>
           <button
             className="btn btn-warning"
-            onClick={() => navigate(`/projects/edit/${project.project_master_id}`)}
+            onClick={() =>
+              navigate(`/projects/edit/${project.project_master_id}`)
+            }
           >
             <FaEdit className="me-2" />
             Edit

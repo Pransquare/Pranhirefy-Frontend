@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ProjectService from "../services/ProjectService";
 
-import '../Project.css';
+import "../Project.css";
 
 const AddProjectForm = () => {
   const navigate = useNavigate();
@@ -34,9 +34,13 @@ const AddProjectForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     try {
       await ProjectService.createProject(project);
       setSuccessMessage("✅ Project added successfully!");
+      setTimeout(() => {
+        navigate("/projects");
+      }, 1000);
       setProject({
         project_code: "",
         project_name: "",
@@ -135,7 +139,7 @@ const AddProjectForm = () => {
               <label className="">Created By</label>
               <input
                 type="text"
-                name="created_by "
+                name="created_by"
                 value={project.created_by}
                 className="form-control colored-label"
                 onChange={handleChange}
@@ -195,19 +199,6 @@ const AddProjectForm = () => {
                 className="form-control colored-label"
                 onChange={handleChange}
               />
-            </div>
-
-            <div className="col-md-4">
-              <label className="">Deleted</label>
-              <select
-                name="deleted"
-                value={project.deleted}
-                className="form-select colored-label"
-                onChange={handleChange}
-              >
-                <option value="No">No</option>
-                <option value="Yes">Yes</option>
-              </select>
             </div>
           </div>
 

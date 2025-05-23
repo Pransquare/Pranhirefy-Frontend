@@ -17,7 +17,9 @@ const HomePage = () => {
   const goToTasks = () => {
     navigate("/tasks");
   };
-
+  const goToProjects = () => {
+    navigate("/projects");
+  };
   return (
     <div className="container mt-5">
       <h2 className="mb-4">Welcome to the Dashboard</h2>
@@ -36,7 +38,9 @@ const HomePage = () => {
         <button className="btn btn-primary" onClick={goToTasks}>
           Tasks Details
         </button>
-        <button className="btn btn-success">Project Details</button>
+        <button className="btn btn-primary" onClick={goToProjects}>
+          Project Details
+        </button>
       </div>
     </div>
   );

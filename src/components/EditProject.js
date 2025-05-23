@@ -5,6 +5,7 @@ import ProjectService from "../services/ProjectService";
 const EditProjectForm = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+
   const [project, setProject] = useState({
     project_code: "",
     project_name: "",
@@ -20,15 +21,32 @@ const EditProjectForm = () => {
     deleted: "No",
   });
 
+  const [successMessage, setSuccessMessage] = useState("");
+
   useEffect(() => {
     ProjectService.getProjectById(id)
       .then((res) => {
-        // If res.data contains project object, adjust accordingly
-        setProject(res.data || res);
+        const data = res.data || res;
+        console.log("Fetched project:", data);
+        // Normalize keys if needed
+        setProject({
+          project_code: data.project_code || "",
+          project_name: data.project_name || "",
+          client_code: data.client_code || "",
+          status: data.status || "Active",
+          location: data.location || "",
+          created_by: data.created_by || data.createdBy || "",
+          created_date: data.created_date || data.createdDate || "",
+          modified_by: data.modified_by || data.modifiedBy || "",
+          modified_date: data.modified_date || data.modifiedDate || "",
+          start_date: data.start_date || data.startDate || "",
+          end_date: data.end_date || data.endDate || "",
+          deleted: data.deleted || "No",
+        });
       })
       .catch((err) => {
         console.error("Error fetching project:", err);
-        alert("Failed to load project details");
+        setSuccessMessage("❌ Failed to load project details.");
       });
   }, [id]);
 
@@ -44,11 +62,13 @@ const EditProjectForm = () => {
     e.preventDefault();
     try {
       await ProjectService.updateProject(id, project);
-      alert("Project updated successfully");
-      navigate("/projects");
+      setSuccessMessage("✅ Project updated successfully!");
+      setTimeout(() => {
+        navigate("/projects");
+      }, 1000);
     } catch (err) {
       console.error("Error updating project:", err);
-      alert("Update failed");
+      setSuccessMessage("❌ Failed to update project.");
     }
   };
 
@@ -59,6 +79,13 @@ const EditProjectForm = () => {
   return (
     <div className="container mt-4 border p-4 rounded shadow-sm">
       <h2 className="text-center mb-4 text-primary">Edit Project Details</h2>
+
+      {successMessage && (
+        <div className="alert alert-info text-center mb-3">
+          {successMessage}
+        </div>
+      )}
+
       <form onSubmit={handleUpdate}>
         <div className="row g-3">
           <div className="col-md-4">
@@ -67,7 +94,7 @@ const EditProjectForm = () => {
               type="text"
               name="project_code"
               value={project.project_code}
-              className="form-control colored-label"
+              className="form-control"
               onChange={handleChange}
               required
             />
@@ -79,7 +106,7 @@ const EditProjectForm = () => {
               type="text"
               name="project_name"
               value={project.project_name}
-              className="form-control colored-label"
+              className="form-control"
               onChange={handleChange}
               required
             />
@@ -91,7 +118,7 @@ const EditProjectForm = () => {
               type="text"
               name="client_code"
               value={project.client_code}
-              className="form-control colored-label"
+              className="form-control"
               onChange={handleChange}
             />
           </div>
@@ -101,7 +128,7 @@ const EditProjectForm = () => {
             <select
               name="status"
               value={project.status}
-              className="form-select colored-label"
+              className="form-select"
               onChange={handleChange}
             >
               <option value="Active">Active</option>
@@ -115,19 +142,18 @@ const EditProjectForm = () => {
               type="text"
               name="location"
               value={project.location}
-              className="form-control colored-label"
+              className="form-control"
               onChange={handleChange}
             />
           </div>
 
-          {/* Created By and Created Date - read only */}
           <div className="col-md-4">
             <label>Created By</label>
             <input
               type="text"
               name="created_by"
-              value={project.created_by}
-              className="form-control colored-label"
+              value={project.created_by || ""}
+              className="form-control"
               readOnly
             />
           </div>
@@ -137,8 +163,12 @@ const EditProjectForm = () => {
             <input
               type="date"
               name="created_date"
-              value={project.created_date ? project.created_date.substring(0,10) : ""}
-              className="form-control colored-label"
+              value={
+                project.created_date
+                  ? project.created_date.substring(0, 10)
+                  : ""
+              }
+              className="form-control"
               readOnly
             />
           </div>
@@ -149,7 +179,7 @@ const EditProjectForm = () => {
               type="text"
               name="modified_by"
               value={project.modified_by}
-              className="form-control colored-label"
+              className="form-control"
               onChange={handleChange}
             />
           </div>
@@ -159,8 +189,12 @@ const EditProjectForm = () => {
             <input
               type="date"
               name="modified_date"
-              value={project.modified_date ? project.modified_date.substring(0,10) : ""}
-              className="form-control colored-label"
+              value={
+                project.modified_date
+                  ? project.modified_date.substring(0, 10)
+                  : ""
+              }
+              className="form-control"
               onChange={handleChange}
             />
           </div>
@@ -170,8 +204,10 @@ const EditProjectForm = () => {
             <input
               type="date"
               name="start_date"
-              value={project.start_date ? project.start_date.substring(0,10) : ""}
-              className="form-control colored-label"
+              value={
+                project.start_date ? project.start_date.substring(0, 10) : ""
+              }
+              className="form-control"
               onChange={handleChange}
             />
           </div>
@@ -181,8 +217,8 @@ const EditProjectForm = () => {
             <input
               type="date"
               name="end_date"
-              value={project.end_date ? project.end_date.substring(0,10) : ""}
-              className="form-control colored-label"
+              value={project.end_date ? project.end_date.substring(0, 10) : ""}
+              className="form-control"
               onChange={handleChange}
             />
           </div>
@@ -192,7 +228,7 @@ const EditProjectForm = () => {
             <select
               name="deleted"
               value={project.deleted}
-              className="form-select colored-label"
+              className="form-select"
               onChange={handleChange}
             >
               <option value="No">No</option>

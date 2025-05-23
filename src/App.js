@@ -41,15 +41,11 @@ import HomePage from "./components/HomePage";
 import ClientList from "./components/ClientList";
 import ClientForm from "./components/ClientForm";
 import ViewClient from "./components/ViewClient";
- 
-import LeaveTypeList from './components/LeaveTypeList';
-import ViewLeaveType from './components/ViewLeaveType';
-import AddLeaveTypeForm from './components/AddLeaveTypeForm';
+
 import ProjectList from "./components/ProjectList";
 import AddProject from "./components/AddProject"; // You need to create this
-import ViewProject from "./components/ViewProject";       // Optional: for viewing details
-import EditProjectForm from "./components/EditProjectForm";
- 
+import ViewProject from "./components/ViewProject"; // Optional: for viewing details
+import EditProject from "./components/EditProject";
 
 import LeaveTypeList from "./components/LeaveTypeList";
 import ViewLeaveType from "./components/ViewLeaveType";
@@ -62,7 +58,6 @@ import AddTask from "./components/AddTask";
 import MasterReleaseNotesList from "./components/MasterReleaseNoteList";
 import MasterReleaseNotesForm from "./components/MasterReleaseNoteForm";
 import ViewReleaseNote from "./components/ViewReleaseNote";
- 
 
 function App() {
   return (
@@ -80,35 +75,25 @@ function App() {
         <Route path="/leavetypes/add" element={<AddLeaveTypeForm />} />
         <Route path="/leavetypes/edit/:id" element={<AddLeaveTypeForm />} />
         <Route path="/leavetypes/view/:id" element={<ViewLeaveType />} />
- 
-
         {/* Project Type Routes */}
-        <Route path="/" element={<Navigate to="/projects" replace />} />
+        {/* <Route path="/" element={<Navigate to="/projects" replace />} /> */}
         <Route path="/projects" element={<ProjectList />} />
         <Route path="/projects/add" element={<AddProject />} />
         <Route path="/projects/view/:id" element={<ViewProject />} />
-        <Route path="/projects/edit/:id" element={<EditProjectForm />} />
-        
- 
+        <Route path="/projects/edit/:id" element={<EditProject />} />
         {/* Tasks Routes*/}
         <Route path="/tasks" element={<TaskList />} />
         <Route path="/tasks/view-task/:id" element={<TaskDetails />} />{" "}
-        {/* ✅ View page */}
         <Route path="/tasks/edit-task/:id" element={<EditTask />} />
         <Route path="/tasks/add-task" element={<AddTask />} />
         {/*Release Notes Routes */}
         <Route path="/relaseNote" element={<MasterReleaseNotesList />} />
-        {/* <Route
-          path="/relaseNote"
-          element={<Navigate to="/releaseNote" replace />}
-        /> */}
         <Route path="/relaseNote/add" element={<MasterReleaseNotesForm />} />
         <Route
           path="/relaseNote/edit/:id"
           element={<MasterReleaseNotesForm />}
         />
         <Route path="/relaseNote/view/:id" element={<ViewReleaseNote />} />
- 
       </Routes>
     </Router>
   );
