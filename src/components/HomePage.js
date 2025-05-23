@@ -34,7 +34,7 @@ const HomePage = () => {
         <button className="btn btn-primary" onClick={goToLeaveTypes}>
           Leave Type Details
         </button>
-        <button className="btn btn-success" onClick={goToGoals}>
+        <button className="btn btn-primary" onClick={goToGoals}>
           Goal Details
         </button>
         <button className="btn btn-primary" onClick={goToReleaseNotes}>
