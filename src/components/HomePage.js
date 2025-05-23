@@ -1,17 +1,22 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import React from "react";
+import { useNavigate } from "react-router-dom";
 
 const HomePage = () => {
   const navigate = useNavigate();
 
   const goToClients = () => {
-    navigate('/clients');
+    navigate("/clients");
   };
 
   const goToLeaveTypes = () => {
-    navigate('/leavetypes');
+    navigate("/leavetypes");
   };
-
+  const goToReleaseNotes = () => {
+    navigate("/relaseNote");
+  };
+  const goToTasks = () => {
+    navigate("/tasks");
+  };
 
   return (
     <div className="container mt-5">
@@ -23,22 +28,15 @@ const HomePage = () => {
         <button className="btn btn-primary" onClick={goToLeaveTypes}>
           Leave Type Details
         </button>
-        <button className="btn btn-success" >
-         Goal Details
-        </button>
-        <button className="btn btn-success" >
+        <button className="btn btn-success">Goal Details</button>
+        <button className="btn btn-primary" onClick={goToReleaseNotes}>
           ReleaseNotes Details
         </button>
-        <button className="btn btn-success">
-         Designation Details
-        </button>
-        <button className="btn btn-success" >
+        <button className="btn btn-success">Designation Details</button>
+        <button className="btn btn-primary" onClick={goToTasks}>
           Tasks Details
         </button>
-        <button className="btn btn-success" >
-        Project Details
-        </button>
-        
+        <button className="btn btn-success">Project Details</button>
       </div>
     </div>
   );
