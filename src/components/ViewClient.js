@@ -36,7 +36,10 @@ export default function ViewClient() {
 
   return (
     <div className="container mt-5">
-      <div className="card shadow-lg p-4">
+      <div
+        className="card shadow-lg p-4"
+        style={{ maxHeight: "80vh", overflowY: "auto" }}
+      >
         <h2 className="mb-4 text-primary">Client Details</h2>
 
         <div className="row g-3">

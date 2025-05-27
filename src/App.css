@@ -3,7 +3,7 @@
 header{
   background-color: #033c78;
   margin:0;
-  position:fixed;
+  /* position:fixed; */
   top:0;
   left:0;
   right:0;
@@ -19,4 +19,8 @@ margin-left:-100px;
 .form-control:focus {
   border-color: rgb(77,208,225);
   box-shadow: 0 0 0 0.2rem rgba(77, 208, 255, 0.25);
+}
+
+.offcanvas-backdrop {
+  background-color: transparent !important;
 }
