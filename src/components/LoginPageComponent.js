@@ -89,7 +89,7 @@ const LoginPage = () => {
       else if (role === 'HR') navigate('/hr');
       else if (role === 'EMPLOYEE') navigate('/employee');
       else if (role === 'MANAGER') navigate('/manager');
-      else if (role === 'BUDGET TEAM') navigate('/budget');
+      else if (role === 'FINANCE') navigate('/budget');
       else setError('Role not recognized: ' + user.roleType);
     } catch (error) {
       setError('Invalid username or password');
