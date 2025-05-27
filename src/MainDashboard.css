@@ -26,15 +26,19 @@
 }
 
 .horizontal-menu {
-  background-color: #0e054f;
+  background-color: rgb(234, 230, 230);
   
 
 }
 .horizontal-bar{
     background-color: #0e054f;
     animation: dropdown 0.3s ease-out;
-}.offcanvas.horizontal-bar {
+   
+}
+.offcanvas.horizontal-bar {
   background-color: #0e054f ;
+  color:#0e054f;
+
 }
 
 .menu-item {
@@ -102,3 +106,9 @@
   border-left: 2px solid rgba(255, 255, 255, 0.2);
   margin-bottom: 2px;
 }
+
+
+.hamburger-menu{
+  color:red
+}
+
