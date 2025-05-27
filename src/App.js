@@ -96,9 +96,10 @@ function App() {
         <Route path="/clients/view/:id" element={<ViewClient />} />
         {/* Leave Type Routes */}
         <Route path="/leavetypes" element={<LeaveTypeList />} />
-        <Route path="/leavetypes/add" element={<AddLeaveTypeForm />} />
-        <Route path="/leavetypes/edit/:id" element={<AddLeaveTypeForm />} />
-        <Route path="/leavetypes/view/:id" element={<ViewLeaveType />} />
+<Route path="/leavetypes/add" element={<AddLeaveTypeForm />} />
+<Route path="/leavetypes/edit/:id" element={<AddLeaveTypeForm />} />
+<Route path="/leavetypes/view/:id" element={<ViewLeaveType />} />
+
         {/* Project Type Routes */}
         {/* <Route path="/" element={<Navigate to="/projects" replace />} /> */}
         <Route path="/projects" element={<ProjectList />} />

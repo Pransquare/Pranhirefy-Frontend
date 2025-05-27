@@ -111,7 +111,7 @@ const LeaveTypeList = () => {
 
   return (
     <div className="container py-4">
-      <h2 className="mb-4">Leave Type Management</h2>
+      <h2 className="mb-4 text-primary">Leave Type Management</h2>
 
       <div className="row g-2 mb-3 align-items-end">
         <div className="col-md-6">
