@@ -15,8 +15,10 @@ const NavbarSidebar = () => {
   const [openSubHR, setOpenSubHR] = useState(false);
   const [openSubIT, setOpenSubIT] = useState(false);
   const [openSubFinance, setOpenSubFinance] = useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);  // Success modal
   
    const [openSub, setOpenSub] = useState({});
+const [successMessage, setSuccessMessage] = useState("");
 
 
    const menuRef = useRef();
@@ -25,6 +27,9 @@ const [showModal, setShowModal] = useState(false);
   const navigate = useNavigate();
    const [user, setUser] = useState(null);
 
+useEffect(() => {
+  setShowModal(false);
+}, []);
 
      useEffect(() => {
        const savedUser = JSON.parse(localStorage.getItem('loggedInUser'));
@@ -104,8 +109,17 @@ const onSubmit = async (data) => {
     await axios.put(`http://localhost:8080/api/login-users/update/${encodeURIComponent(userId)}`, updatedUser);
 
 
-    alert('Password changed successfully!');
-    handleCloseModal();
+ setShowModal(false);
+
+    // Open success modal
+    setShowSuccessModal(true);
+
+    // Automatically close success modal after 2 seconds
+    // setTimeout(() => {
+    //   setShowSuccessModal(false);
+    // }, 2000);
+
+    // handleCloseModal();
   } catch (error) {
     console.error('Error changing password:', error);
     alert('Failed to change password');
@@ -136,37 +150,7 @@ employee: ["hrTools", "finance","reportExpense", "releaseNote"], // updated here
     return accessibleMenus ? accessibleMenus.includes(menuKey) : false;
   };
 
-//  const toggleMainMenu = (menu) => {
-//   if (openMain === menu) {
-//     // Close the current main menu and all submenus
-//     setOpenMain(null);
-//     setOpenSubAdmin(false);
-//     // setOpenSubMasters(false);
-//     setOpenSubHR(false);
-//     setOpenSubIT(false);
-//     setOpenSubFinance(false);
-//   } else {
-//     // Open selected main menu, reset all submenus first
-//     setOpenMain(menu);
-//     setOpenSubAdmin(menu === "admin");       // open admin submenu if admin menu opened
-//     setOpenSubMasters(false);                // reset deeper submenu
-//     setOpenSubHR(menu === "hr");
-//     setOpenSubIT(menu === "it");
-//     setOpenSubFinance(menu === "finance");
-//     setOpenSubMasters(false);
-//   }
-// };
 
-  //  const toggleSubMenu = (submenu) => {
-  //   setOpenSub((prev) => {
-  //     // If clicked submenu is already open, close it
-  //     if (prev[submenu]) {
-  //       return {};
-  //     }
-  //     // Otherwise, open only the clicked submenu, closing all others
-  //     return { [submenu]: true };
-  //   });
-  // };
 
 const toggleSubMenu = (submenu) => {
   if (submenu === "ems" || submenu === "smartHire") {
@@ -217,7 +201,8 @@ const toggleSubMasters = () => {
   };
 
   const handleChangePassword = () => {
-    setShowModal(true);
+      setShowMenu(false); // hide dropdown menu
+     setShowModal(true); // show modal
        console.log('Change Password clicked');
   };
   const submenuParentMap = {
@@ -235,7 +220,7 @@ const isEmployee = user.roleType.toLowerCase() === "employee";
     <>
       {/* Navbar - simple placeholder, customize as needed */}
        {/* Navbar */}
-      <nav className="navbar navbar-expand-lg horizontal-menu px-3 shadow-sm" style={{height:"50px"}}>
+      <nav className="navbar  navbar-expand-lg horizontal-menu px-3 shadow-sm" style={{height:"50px"}}>
         <div className="container-fluid d-flex justify-content-between align-items-center">
         <div className="d-flex align-items-center">
           <button
@@ -274,6 +259,7 @@ const isEmployee = user.roleType.toLowerCase() === "employee";
         boxShadow: "0 4px 12px rgba(0, 0, 0, 0.15)",
         background: "white",
         backdropFilter: "blur(8px)",
+         listStyleType: "none", // <-- removes the dots
       }}
       className="p-2 animate__animated animate__fadeIn"
     >
@@ -715,9 +701,110 @@ const isEmployee = user.roleType.toLowerCase() === "employee";
       
     </ul>
   </div>
+  {/* User Dropdown Menu */}
+{showMenu && (
+  <ul
+    className="dropdown-menu show"
+    style={{
+      position: "absolute",
+      top: "55px",
+      right: 0,
+      minWidth: "180px",
+      zIndex: 1050,
+      borderRadius: "0.5rem",
+      boxShadow: "0 4px 12px rgba(0,0,0,.15)",
+      backgroundColor: "white",
+    }}
+  >
+    <li>
+      <button className="dropdown-item" onClick={handleChangePassword}>
+        Change Password
+      </button>
+    </li>
+    <li><hr className="dropdown-divider" /></li>
+    <li>
+      <button className="dropdown-item" onClick={handleLogout}>
+        Logout
+      </button>
+    </li>
+  </ul>
+)}
+
+
+
 </div>
 
-
+{/* Change Password Modal */}
+{showModal && (
+  <div className="modal show d-block" tabIndex="-1" role="dialog" aria-modal="true">
+    <div className="modal-dialog modal-dialog-centered" role="document">
+      <div className="modal-content">
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <div className="modal-header">
+            <h5 className="modal-title">Change Password</h5>
+            <button type="button" className="btn-close" onClick={handleCloseModal} aria-label="Close"></button>
+          </div>
+          <div className="modal-body">
+            <div className="mb-3">
+              {successMessage && (
+  <div className="alert alert-success py-2 text-center" role="alert">
+    {successMessage}
+  </div>
+)}
+              <label htmlFor="oldPassword" className="form-label">Old Password</label>
+              <input
+                type="password"
+                id="oldPassword"
+                className={`form-control ${errors.oldPassword ? "is-invalid" : ""}`}
+                {...register("oldPassword")}
+              />
+              <div className="invalid-feedback">{errors.oldPassword?.message}</div>
+            </div>
+            <div className="mb-3">
+              <label htmlFor="newPassword" className="form-label">New Password</label>
+              <input
+                type="password"
+                id="newPassword"
+                className={`form-control ${errors.newPassword ? "is-invalid" : ""}`}
+                {...register("newPassword")}
+              />
+              <div className="invalid-feedback">{errors.newPassword?.message}</div>
+            </div>
+            <div className="mb-3">
+              <label htmlFor="confirmPassword" className="form-label">Confirm Password</label>
+              <input
+                type="password"
+                id="confirmPassword"
+                className={`form-control ${errors.confirmPassword ? "is-invalid" : ""}`}
+                {...register("confirmPassword")}
+              />
+              <div className="invalid-feedback">{errors.confirmPassword?.message}</div>
+            </div>
+          </div>
+          <div className="modal-footer">
+            <button type="button" className="btn btn-secondary" onClick={handleCloseModal}>Cancel</button>
+            <button type="submit" className="btn btn-primary">Change Password</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+)}
+{/* Success Modal */}
+{showSuccessModal && (
+  <div className="modal show d-block" tabIndex="-1" role="dialog" aria-modal="true">
+    <div className="modal-dialog modal-dialog-centered" role="document">
+      <div className="modal-content">
+        <div className="modal-body text-center p-4">
+          <h5>Password changed successfully!</h5>
+          <button className="btn btn-primary mt-3" onClick={() => setShowSuccessModal(false)}>
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+)}
 
     </>
   );

@@ -192,6 +192,9 @@ import { useNavigate } from "react-router-dom";
 import { FaEye, FaEdit, FaTrash, FaPlus } from "react-icons/fa";
 import { Modal, Button } from "react-bootstrap";
 import "./ClientList.css";
+import NavbarSidebar from './Sidebar';
+
+import '../DesignationComponent.css';
 
 export default function ClientList() {
   const [clients, setClients] = useState([]);
@@ -272,6 +275,9 @@ export default function ClientList() {
 
   return (
     <div className="container mt-4" style={{ paddingBottom: "80px" }}>
+            <div className='NavbarSidebar'>
+           <NavbarSidebar />
+               </div>
       <h2 className="text-primary">Clients</h2>
 
       <div className="mb-3 d-flex align-items-center gap-2">

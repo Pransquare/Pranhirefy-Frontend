@@ -30,11 +30,13 @@
   
 
 }
+
 .horizontal-bar{
     background-color: #0e054f;
     animation: dropdown 0.3s ease-out;
    
 }
+
 .offcanvas.horizontal-bar {
   background-color: #0e054f ;
   color:#0e054f;
@@ -112,3 +114,10 @@
   color:red
 }
 
+.NavbarSidebar {
+  width: 100%;
+  position: fixed; /* or sticky if you want it fixed on scroll */
+  top: 0;
+  left: 0;
+  z-index: 1000;
+}

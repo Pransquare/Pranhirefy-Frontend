@@ -1,4 +1,228 @@
 
+// import React, { useEffect, useState } from 'react';
+// import { useParams, useNavigate, useLocation } from 'react-router-dom';
+// import axios from 'axios';
+// import { Button, Form, Alert, Card, Row, Col } from 'react-bootstrap';
+// import { PencilSquare } from 'react-bootstrap-icons';
+// import HeaderComponent from '../HeaderComponent';
+
+// export default function DesignationDetails() {
+//   const { id } = useParams();
+//   const navigate = useNavigate();
+//   const location = useLocation();
+
+//   const [designation, setDesignation] = useState(null);
+//   const [editedDesignation, setEditedDesignation] = useState({});
+//   const [error, setError] = useState('');
+//   const [isEditing, setIsEditing] = useState(location.state?.isEditing || false);
+//   const [message, setMessage] = useState('');
+//   const [messageType, setMessageType] = useState('');
+
+//   useEffect(() => {
+//     const fetchDesignation = async () => {
+//       try {
+//         const response = await axios.get(`http://localhost:8080/api/getDesignationById/${id}`);
+//         setDesignation(response.data);
+//         setEditedDesignation(response.data);
+//       } catch (error) {
+//         setError('Failed to fetch designation details.');
+//       }
+//     };
+
+//     fetchDesignation();
+//   }, [id]);
+
+//   const showMessage = (msg, type = 'success') => {
+//     setMessage(msg);
+//     setMessageType(type);
+//     setTimeout(() => setMessage(''), 3000);
+//   };
+
+//   const handleChange = (e) => {
+//     setEditedDesignation({ ...editedDesignation, [e.target.name]: e.target.value });
+//   };
+
+//   const handleSave = async () => {
+//     try {
+//       const dataToSend = { ...editedDesignation };
+//       delete dataToSend.modifiedDate;
+
+//       await axios.put(`http://localhost:8080/api/updateDesignation/${id}`, dataToSend);
+//       const response = await axios.get(`http://localhost:8080/api/getDesignationById/${id}`);
+//       setDesignation(response.data);
+//       setEditedDesignation(response.data);
+//       setIsEditing(false);
+//       showMessage('Successfully updated the changes.', 'success');
+//     } catch (err) {
+//       showMessage('Failed to update designation.', 'danger');
+//     }
+//   };
+
+//   const handleCancel = () => {
+//     setEditedDesignation(designation);
+//     setIsEditing(false);
+//     showMessage('Updates are cancelled.', 'danger');
+//   };
+
+//   if (error) {
+//     return <div className="alert alert-danger mt-4">{error}</div>;
+//   }
+
+//   if (!designation) {
+//     return <div className="mt-4">Loading...</div>;
+//   }
+
+//   const cardStyle = {
+//     backgroundColor: 'rgba(0, 0, 0, 0.1)', // light black transparent background
+//   };
+
+//   return (
+//     <div className="container mt-5">
+//       <HeaderComponent />
+//       {message && (
+//         <Alert variant={messageType} className="text-center">
+//           {message}
+//         </Alert>
+//       )}
+
+//       <div className="card p-4 shadow-lg border rounded-4 main-content">
+//         <h3 className="mb-4 text-primary text-center">Designation Details</h3>
+
+//         <Row>
+//           {/* ID */}
+//           <Col md={6} className="mb-4">
+//             <Card style={cardStyle}>
+//               <Card.Body>
+//                 <Form.Label className="fw-bold text-secondary">ID:</Form.Label>
+//                 <div className="fs-5 mt-1">{designation.masterDesignationId}</div>
+//               </Card.Body>
+//             </Card>
+//           </Col>
+
+//           {/* Code */}
+//           <Col md={6} className="mb-4">
+//             <Card style={cardStyle}>
+//               <Card.Body>
+//                 <Form.Group>
+//                   <Form.Label className="fw-bold text-secondary">Code:</Form.Label>
+//                   {isEditing ? (
+//                     <Form.Control
+//                       type="text"
+//                       name="masterDesignationCode"
+//                       value={editedDesignation.masterDesignationCode ||''}
+//                       onChange={handleChange}
+//                       className="mt-1"
+//                     />
+//                   ) : (
+//                     <div className="fs-5 mt-1">{designation.masterDesignationCode}</div>
+//                   )}
+//                 </Form.Group>
+//               </Card.Body>
+//             </Card>
+//           </Col>
+
+//           {/* Description */}
+//           <Col md={6} className="mb-4">
+//             <Card style={cardStyle}>
+//               <Card.Body>
+//                 <Form.Group>
+//                   <Form.Label className="fw-bold text-secondary">Description:</Form.Label>
+//                   {isEditing ? (
+//                     <Form.Control
+//                       as="textarea"
+//                       name="designationDescription"
+//                       value={editedDesignation.designationDescription}
+//                       onChange={handleChange}
+//                       className="mt-1"
+//                       rows={3}
+//                     />
+//                   ) : (
+//                     <div className="fs-5 mt-1">{designation.designationDescription}</div>
+//                   )}
+//                 </Form.Group>
+//               </Card.Body>
+//             </Card>
+//           </Col>
+
+//           {/* Created By */}
+//           <Col md={6} className="mb-4">
+//             <Card style={cardStyle}>
+//               <Card.Body>
+//                 <Form.Label className="fw-bold text-secondary">Created By:</Form.Label>
+//                 <div className="fs-5 mt-1">{designation.createdBy}</div>
+//               </Card.Body>
+//             </Card>
+//           </Col>
+
+//           {/* Created Date */}
+//           <Col md={6} className="mb-4">
+//             <Card style={cardStyle}>
+//               <Card.Body>
+//                 <Form.Label className="fw-bold text-secondary">Created Date:</Form.Label>
+//                 <div className="fs-5 mt-1">{designation.createdDate}</div>
+//               </Card.Body>
+//             </Card>
+//           </Col>
+
+//           {/* Modified By */}
+//           <Col md={6} className="mb-4">
+//             <Card style={cardStyle}>
+//               <Card.Body>
+//                 <Form.Group>
+//                   <Form.Label className="fw-bold text-secondary">Modified By:</Form.Label>
+//                   {isEditing ? (
+//                     <Form.Control
+//                       type="text"
+//                       name="modifiedBy"
+//                       value={editedDesignation.modifiedBy}
+//                       onChange={handleChange}
+//                       className="mt-1"
+//                     />
+//                   ) : (
+//                     <div className="fs-5 mt-1">{designation.modifiedBy}</div>
+//                   )}
+//                 </Form.Group>
+//               </Card.Body>
+//             </Card>
+//           </Col>
+
+//           {/* Modified Date */}
+//           <Col md={6} className="mb-4">
+//             <Card style={cardStyle}>
+//               <Card.Body>
+//                 <Form.Label className="fw-bold text-secondary">Modified Date:</Form.Label>
+//                 <div className="fs-5 mt-1">{designation.modifiedDate}</div>
+//               </Card.Body>
+//             </Card>
+//           </Col>
+//         </Row>
+
+//         <div className="d-flex justify-content-between mt-4">
+//           <Button variant="secondary" onClick={() => navigate('/designation')} className="fw-semibold">
+//             &larr; Back to List
+//           </Button>
+
+//           {isEditing ? (
+//             <div className="d-flex gap-2">
+//               <Button variant="success" onClick={handleSave} className="fw-semibold px-4">
+//                 Save
+//               </Button>
+//               <Button variant="danger" onClick={handleCancel} className="fw-semibold px-4">
+//                 Cancel
+//               </Button>
+//             </div>
+//           ) : (
+//             <Button variant="warning" onClick={() => setIsEditing(true)} className="fw-semibold px-4 d-flex align-items-center">
+//               <PencilSquare className="me-2" />
+//               Edit
+//             </Button>
+//           )}
+//         </div>
+//       </div>
+//     </div>
+//   );
+// }
+
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
@@ -16,19 +240,20 @@ export default function DesignationDetails() {
   const [error, setError] = useState('');
   const [isEditing, setIsEditing] = useState(location.state?.isEditing || false);
   const [message, setMessage] = useState('');
-  const [messageType, setMessageType] = useState('');
+  const [messageType, setMessageType] = useState('success');
+const [errors, setErrors] = useState({});
 
   useEffect(() => {
-    const fetchDesignation = async () => {
+    async function fetchDesignation() {
       try {
-        const response = await axios.get(`http://localhost:8080/api/getDesignation/${id}`);
-        setDesignation(response.data);
-        setEditedDesignation(response.data);
-      } catch (error) {
+        const res = await axios.get(`http://localhost:8080/api/getDesignationById/${id}`);
+        setDesignation(res.data);
+        setEditedDesignation(res.data);
+        setError('');
+      } catch (err) {
         setError('Failed to fetch designation details.');
       }
-    };
-
+    }
     fetchDesignation();
   }, [id]);
 
@@ -42,54 +267,60 @@ export default function DesignationDetails() {
     setEditedDesignation({ ...editedDesignation, [e.target.name]: e.target.value });
   };
 
-  const handleSave = async () => {
-    try {
-      const dataToSend = { ...editedDesignation };
-      delete dataToSend.modifiedDate;
+ const handleSave = async () => {
+  try {
+    setErrors({}); // Clear previous errors
+    const dataToSend = { ...editedDesignation };
 
-      await axios.put(`http://localhost:8080/api/updateDesignation/${id}`, dataToSend);
-      const response = await axios.get(`http://localhost:8080/api/getDesignation/${id}`);
-      setDesignation(response.data);
-      setEditedDesignation(response.data);
-      setIsEditing(false);
-      showMessage('Successfully updated the changes.', 'success');
-    } catch (err) {
-      showMessage('Failed to update designation.', 'danger');
+    if (!dataToSend.masterDesignationId) {
+      dataToSend.masterDesignationId = id;
     }
-  };
+
+    if (dataToSend.createdDate instanceof Date) {
+      dataToSend.createdDate = dataToSend.createdDate.toISOString().split('T')[0];
+    }
+
+    await axios.put(`http://localhost:8080/api/updateDesignation/${id}`, dataToSend);
+
+    const res = await axios.get(`http://localhost:8080/api/getDesignationById/${id}`);
+    setDesignation(res.data);
+    setEditedDesignation(res.data);
+    setIsEditing(false);
+    showMessage('Successfully updated designation.', 'success');
+  } catch (err) {
+    if (err.response && err.response.data) {
+      // Assume backend sends an object of field errors
+      setErrors(err.response.data);
+      showMessage('Please fix the errors below.', 'danger');
+    } else {
+      showMessage('Failed to update designation.', 'danger');
+      console.error(err.response?.data || err.message);
+    }
+  }
+};
+
+
 
   const handleCancel = () => {
     setEditedDesignation(designation);
     setIsEditing(false);
-    showMessage('Updates are cancelled.', 'danger');
+    showMessage('Changes cancelled.', 'warning');
   };
 
-  if (error) {
-    return <div className="alert alert-danger mt-4">{error}</div>;
-  }
+  if (error) return <Alert variant="danger" className="mt-4">{error}</Alert>;
+  if (!designation) return <div className="mt-4">Loading...</div>;
 
-  if (!designation) {
-    return <div className="mt-4">Loading...</div>;
-  }
-
-  const cardStyle = {
-    backgroundColor: 'rgba(0, 0, 0, 0.1)', // light black transparent background
-  };
+  const cardStyle = { backgroundColor: 'rgba(0,0,0,0.1)' };
 
   return (
     <div className="container mt-5">
       <HeaderComponent />
-      {message && (
-        <Alert variant={messageType} className="text-center">
-          {message}
-        </Alert>
-      )}
+      {message && <Alert variant={messageType} className="text-center">{message}</Alert>}
 
       <div className="card p-4 shadow-lg border rounded-4 main-content">
         <h3 className="mb-4 text-primary text-center">Designation Details</h3>
 
         <Row>
-          {/* ID */}
           <Col md={6} className="mb-4">
             <Card style={cardStyle}>
               <Card.Body>
@@ -99,20 +330,25 @@ export default function DesignationDetails() {
             </Card>
           </Col>
 
-          {/* Code */}
           <Col md={6} className="mb-4">
             <Card style={cardStyle}>
               <Card.Body>
                 <Form.Group>
                   <Form.Label className="fw-bold text-secondary">Code:</Form.Label>
                   {isEditing ? (
+                    <>
                     <Form.Control
                       type="text"
                       name="masterDesignationCode"
-                      value={editedDesignation.masterDesignationCode}
+                      value={editedDesignation.masterDesignationCode || ''}
                       onChange={handleChange}
-                      className="mt-1"
+                      maxLength={20}
+                      isInvalid={!!errors.masterDesignationCode}
                     />
+                    <Form.Control.Feedback type="invalid">
+        {errors.masterDesignationCode}
+      </Form.Control.Feedback>
+    </>
                   ) : (
                     <div className="fs-5 mt-1">{designation.masterDesignationCode}</div>
                   )}
@@ -121,21 +357,26 @@ export default function DesignationDetails() {
             </Card>
           </Col>
 
-          {/* Description */}
           <Col md={6} className="mb-4">
             <Card style={cardStyle}>
               <Card.Body>
                 <Form.Group>
                   <Form.Label className="fw-bold text-secondary">Description:</Form.Label>
                   {isEditing ? (
+                    <>
                     <Form.Control
                       as="textarea"
                       name="designationDescription"
-                      value={editedDesignation.designationDescription}
+                      value={editedDesignation.designationDescription || ''}
                       onChange={handleChange}
-                      className="mt-1"
                       rows={3}
+                      maxLength={250}
+                       isInvalid={!!errors.designationDescription}
                     />
+                       <Form.Control.Feedback type="invalid">
+        {errors.designationDescription}
+      </Form.Control.Feedback>
+    </>
                   ) : (
                     <div className="fs-5 mt-1">{designation.designationDescription}</div>
                   )}
@@ -144,7 +385,6 @@ export default function DesignationDetails() {
             </Card>
           </Col>
 
-          {/* Created By */}
           <Col md={6} className="mb-4">
             <Card style={cardStyle}>
               <Card.Body>
@@ -154,67 +394,72 @@ export default function DesignationDetails() {
             </Card>
           </Col>
 
-          {/* Created Date */}
           <Col md={6} className="mb-4">
             <Card style={cardStyle}>
               <Card.Body>
                 <Form.Label className="fw-bold text-secondary">Created Date:</Form.Label>
-                <div className="fs-5 mt-1">{designation.createdDate}</div>
+                <div className="fs-5 mt-1">{new Date(designation.createdDate).toLocaleDateString()}</div>
               </Card.Body>
             </Card>
           </Col>
 
-          {/* Modified By */}
           <Col md={6} className="mb-4">
             <Card style={cardStyle}>
               <Card.Body>
                 <Form.Group>
                   <Form.Label className="fw-bold text-secondary">Modified By:</Form.Label>
                   {isEditing ? (
+                    <>
                     <Form.Control
                       type="text"
                       name="modifiedBy"
-                      value={editedDesignation.modifiedBy}
+                      value={editedDesignation.modifiedBy || ''}
                       onChange={handleChange}
-                      className="mt-1"
+                      maxLength={50}
+                       isInvalid={!!errors.modifiedBy}
                     />
+                    <Form.Control.Feedback type="invalid">
+        {errors.modifiedBy}
+      </Form.Control.Feedback>
+    </>
+
                   ) : (
-                    <div className="fs-5 mt-1">{designation.modifiedBy}</div>
+                    <div className="fs-5 mt-1">{designation.modifiedBy || '-'}</div>
                   )}
                 </Form.Group>
               </Card.Body>
             </Card>
           </Col>
 
-          {/* Modified Date */}
           <Col md={6} className="mb-4">
             <Card style={cardStyle}>
               <Card.Body>
                 <Form.Label className="fw-bold text-secondary">Modified Date:</Form.Label>
-                <div className="fs-5 mt-1">{designation.modifiedDate}</div>
+                <div className="fs-5 mt-1">
+                  {designation.modifiedDate ? new Date(designation.modifiedDate).toLocaleDateString() : '-'}
+                </div>
               </Card.Body>
             </Card>
           </Col>
         </Row>
 
         <div className="d-flex justify-content-between mt-4">
-          <Button variant="secondary" onClick={() => navigate('/designation')} className="fw-semibold">
-            &larr; Back to List
+          <Button variant="secondary" onClick={() => navigate('/designation')}>
+            Back
           </Button>
 
           {isEditing ? (
-            <div className="d-flex gap-2">
-              <Button variant="success" onClick={handleSave} className="fw-semibold px-4">
-                Save
-              </Button>
-              <Button variant="danger" onClick={handleCancel} className="fw-semibold px-4">
+            <>
+              <Button variant="danger" onClick={handleCancel}>
                 Cancel
               </Button>
-            </div>
+              <Button variant="primary" onClick={handleSave}>
+                Save
+              </Button>
+            </>
           ) : (
-            <Button variant="warning" onClick={() => setIsEditing(true)} className="fw-semibold px-4 d-flex align-items-center">
-              <PencilSquare className="me-2" />
-              Edit
+            <Button variant="warning" onClick={() => setIsEditing(true)}>
+              <PencilSquare /> Edit
             </Button>
           )}
         </div>

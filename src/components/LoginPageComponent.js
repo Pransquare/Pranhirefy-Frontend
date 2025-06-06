@@ -82,91 +82,112 @@ const LoginPage = () => {
     resolver: yupResolver(resetLinkSchema),
   });
 
-  const onSubmit = async (data) => {
-    setError("");
-    setLoadingLogin(true);
-    try {
-      const response = await axios.post(
-        "http://localhost:8080/api/login-users/login",
-        {
-          username: data.username,
-          password: data.password,
-        }
-      );
-      const user = response.data;
-      localStorage.setItem(
-        "loggedInUser",
-        JSON.stringify({
-          userId: user.userId || user.id,
-          email: user.email,
-          roleType: user.roleType,
-          username: user.username,
-        })
-      );
-      const role = user.roleType?.trim().toUpperCase();
+ const onSubmit = async (data) => {
+  setError("");
+  setLoadingLogin(true);
 
-      if (role === 'ADMIN') navigate('/admin');
-      else if (role === 'HR') navigate('/hr');
-      else if (role === 'EMPLOYEE') navigate('/employee');
-      else if (role === 'MANAGER') navigate('/manager');
-      else if (role === 'FINANCE') navigate('/budget');
-      else setError('Role not recognized: ' + user.roleType);
+  try {
+    const response = await axios.post("http://localhost:8080/api/login-users/login", {
+      username: data.username,
+      password: data.password,
+    });
 
-      if (role === "ADMIN") navigate("/admin");
-      else if (role === "HR") navigate("/hr");
-      else if (role === "EMPLOYEE") navigate("/employee");
-      else if (role === "MANAGER") navigate("/manager");
-      else if (role === "BUDGET TEAM") navigate("/budget");
-      else setError("Role not recognized: " + user.roleType);
+    const user = response.data;
 
-    } catch (error) {
-      setError(error.response?.data || "Invalid username or password");
-    } finally {
-      setLoadingLogin(false);
+    localStorage.setItem(
+      "loggedInUser",
+      JSON.stringify({
+        userId: user.userId || user.id,
+        email: user.email,
+        roleType: user.roleType,
+        username: user.username,
+      })
+    );
+
+    const role = user.roleType?.trim().toUpperCase();
+
+    switch (role) {
+      case "ADMIN":
+        navigate("/admin");
+        break;
+      case "HR":
+        navigate("/hr");
+        break;
+      case "EMPLOYEE":
+        navigate("/employee");
+        break;
+      case "MANAGER":
+        navigate("/manager");
+        break;
+      case "FINANCE":
+      case "BUDGET TEAM":
+        navigate("/budget");
+        break;
+      default:
+        setError("Role not recognized: " + user.roleType);
     }
-  };
 
-  const handleSendOtp = async (data) => {
-    setOtpError("");
-    setLoadingOtpSend(true);
-    try {
-      await axios.post("http://localhost:8080/api/login-users/send-otp", {
-        email: data.email,
-      });
-      setEmailForReset(data.email);
-      setStep("otp");
-    } catch (err) {
-      setOtpError(
-        err.response?.data ||
-          "Failed to send OTP. Make sure the email is correct."
-      );
-    } finally {
-      setLoadingOtpSend(false);
-    }
-  };
+  } catch (error) {
+    // Extract error message from backend response
+    const backendMessage =
+      error.response?.data?.message || // Custom exception with `message`
+      (typeof error.response?.data === "string"
+        ? error.response.data
+        : "Invalid username or password");
+    setError(backendMessage);
+  } finally {
+    setLoadingLogin(false);
+  }
+};
 
-  const handleVerifyOtpAndReset = async (data) => {
-    setOtpError("");
-    setLoadingOtpReset(true);
-    try {
-      const payload = {
-        email: emailForReset,
-        otp: data.otp,
-        newPassword: data.newPassword,
-      };
-      await axios.post(
-        "http://localhost:8080/api/login-users/verify-otp-reset-password",
-        payload
-      );
-      setStep("confirmation");
-    } catch (err) {
-      setOtpError(
-        err.response?.data || "Invalid OTP or error resetting password."
-      );
-    } finally {
-      setLoadingOtpReset(false);
-    }
-  };
+
+ const handleSendOtp = async (data) => {
+  setOtpError("");
+  setLoadingOtpSend(true);
+  try {
+    await axios.post("http://localhost:8080/api/login-users/send-otp", {
+      email: data.email,
+    });
+    setEmailForReset(data.email);
+    setStep("otp");
+  } catch (err) {
+    const backendMessage =
+      err.response?.data?.message || // ✅ handles { message: "..." }
+      (typeof err.response?.data === "string"
+        ? err.response.data // ✅ handles plain text
+        : "Failed to send OTP. Make sure the email is correct.");
+
+    setOtpError(backendMessage); // ✅ this shows the real message to user
+  } finally {
+    setLoadingOtpSend(false);
+  }
+};
+
+ const handleVerifyOtpAndReset = async (data) => {
+  setOtpError("");
+  setLoadingOtpReset(true);
+  try {
+    const payload = {
+      email: emailForReset,
+      otp: data.otp,
+      newPassword: data.newPassword,
+    };
+
+    await axios.post("http://localhost:8080/api/login-users/reset-password", payload);
+
+    resetOtpForm(); // Clear form
+    setStep("confirmation"); // Show success screen
+  } catch (err) {
+    const backendMessage =
+      err.response?.data?.message || // Custom message from Spring Boot
+      (typeof err.response?.data === "string"
+        ? err.response.data
+        : "Failed to reset password. Please check the OTP.");
+    setOtpError(backendMessage);
+  } finally {
+    setLoadingOtpReset(false);
+  }
+};
 
   const handleSendResetLink = async (data) => {
     setLoadingResetLink(true);
@@ -273,9 +294,7 @@ const LoginPage = () => {
               }`}
               autoComplete="username"
             />
-            {errors.username && (
-              <div className="invalid-feedback">{errors.username.message}</div>
-            )}
+           <p className="text-danger">{errors.username?.message}</p>
           </div>
 
           <div className="mb-3 position-relative">
@@ -294,9 +313,7 @@ const LoginPage = () => {
               }`}
               autoComplete="current-password"
             />
-            {errors.password && (
-              <div className="invalid-feedback">{errors.password.message}</div>
-            )}
+            <p className="text-danger">{errors.password?.message}</p>
           </div>
 
           <button
