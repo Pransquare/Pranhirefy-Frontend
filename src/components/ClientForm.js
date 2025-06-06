@@ -1,243 +1,3 @@
-// import React, { useEffect, useState } from "react";
-// import {
-//   createClient,
-//   getClientById,
-//   updateClient,
-// } from "../services/clientService";
-// import { useNavigate, useParams } from "react-router-dom";
-// import statePincodeData from "./statePincodeData.json";
-
-// export default function ClientForm() {
-//   const [client, setClient] = useState({
-//     clientCode: "",
-//     clientName: "",
-//     addressLine1: "",
-//     addressLine2: "",
-//     addressLine3: "",
-//     state: "",
-//     country: "",
-//     postalCode: "",
-//     status: "",
-//     createdBy: "",
-//     modifiedBy: "",
-//     createdDate: "",
-//     modifiedDate: "",
-//   });
-
-//   const [error, setError] = useState("");
-//   const navigate = useNavigate();
-//   const { id } = useParams();
-//   const isEdit = !!id;
-
-//   const getCurrentDate = () => new Date().toISOString().split("T")[0];
-
-//   useEffect(() => {
-//     if (isEdit) {
-//       getClientById(id).then((res) => {
-//         const data = res.data;
-//         setClient({
-//           ...data,
-//           modifiedDate: getCurrentDate(),
-//         });
-//       });
-//     } else {
-//       setClient((prev) => ({
-//         ...prev,
-//         createdDate: getCurrentDate(),
-//         modifiedDate: getCurrentDate(),
-//       }));
-//     }
-//   }, [id, isEdit]);
-
-//   const handleChange = (e) => {
-//     const { name, value } = e.target;
-//     let updatedClient = { ...client, [name]: value };
-
-//     if (name === "state") {
-//       const postal = statePincodeData[value] || "";
-//       updatedClient.postalCode = postal;
-//     }
-
-//     setClient(updatedClient);
-//     setError(""); // clear error on input change
-//   };
-
-//   const handleSubmit = async (e) => {
-//     e.preventDefault();
-
-//     const requiredFields = [
-//       "clientCode",
-//       "clientName",
-//       "addressLine1",
-//       "addressLine2",
-//       "addressLine3",
-//       "state",
-//       "country",
-//       "postalCode",
-//       "status",
-//       "createdBy",
-//       "modifiedBy",
-//     ];
-
-//     for (let field of requiredFields) {
-//       if (!client[field]) {
-//         setError(`Please fill out the ${field} field.`);
-//         return;
-//       }
-//     }
-
-//     try {
-//       if (isEdit) {
-//         await updateClient(id, client);
-//       } else {
-//         await createClient(client);
-//       }
-//       navigate("/clients");
-//     } catch (err) {
-//       console.error("Error response:", err.response);
-
-//       if (err.response || err.response.status === 409) {
-//         const backendMessage =
-//           err.response.data.message || "Client code already exists.";
-//         setError(backendMessage);
-//       } else if (
-//         err.response &&
-//         err.response.data &&
-//         err.response.data.message
-//       ) {
-//         setError(err.response.data.message);
-//       } else {
-//         setError("Unexpected error occurred.");
-//       }
-//     }
-//   };
-
-//   const inputStyle = { fontSize: "0.85rem", height: "36px" };
-
-//   return (
-//     <div className="container mt-5">
-//       <div className="card shadow-lg p-4">
-//         <h4 className="mb-4 text-primary">
-//           {isEdit ? "Edit Client" : "Add Client"}
-//         </h4>
-//         <form onSubmit={handleSubmit}>
-//           <div className="row g-3">
-//             {[
-//               "clientCode",
-//               "clientName",
-//               "addressLine1",
-//               "addressLine2",
-//               "addressLine3",
-//               "country",
-//               "status",
-//             ].map((field) => (
-//               <div className="col-md-6" key={field}>
-//                 <label className="form-label text-muted small text-capitalize">
-//                   {field}
-//                 </label>
-//                 <input
-//                   type="text"
-//                   className="form-control border-primary py-1"
-//                   style={inputStyle}
-//                   name={field}
-//                   value={client[field]}
-//                   onChange={handleChange}
-//                   required
-//                 />
-//               </div>
-//             ))}
-
-//             {/* State Dropdown */}
-//             <div className="col-md-6">
-//               <label className="form-label text-muted small">State</label>
-//               <select
-//                 className="form-select border-primary py-1"
-//                 style={inputStyle}
-//                 name="state"
-//                 value={client.state}
-//                 onChange={handleChange}
-//                 required
-//               >
-//                 <option value="">-- Select State --</option>
-//                 {Object.keys(statePincodeData).map((stateName) => (
-//                   <option
-//                     key={stateName}
-//                     value={stateName}
-//                     style={{ fontSize: "0.8rem", padding: "4px" }}
-//                   >
-//                     {stateName}
-//                   </option>
-//                 ))}
-//               </select>
-//             </div>
-
-//             {/* Postal Code */}
-//             <div className="col-md-6">
-//               <label className="form-label text-muted small">Postal Code</label>
-//               <input
-//                 type="text"
-//                 className="form-control border-secondary bg-light py-1"
-//                 style={inputStyle}
-//                 name="postalCode"
-//                 value={client.postalCode}
-//                 readOnly
-//                 required
-//               />
-//             </div>
-
-//             {/* Created By */}
-//             <div className="col-md-6">
-//               <label className="form-label text-muted small">Created By</label>
-//               <input
-//                 type="text"
-//                 className="form-control border-info py-1"
-//                 style={inputStyle}
-//                 name="createdBy"
-//                 value={client.createdBy}
-//                 onChange={handleChange}
-//                 required
-//                 readOnly={isEdit}
-//               />
-//             </div>
-
-//             {/* Modified By */}
-//             <div className="col-md-6">
-//               <label className="form-label text-muted small">Modified By</label>
-//               <input
-//                 type="text"
-//                 className="form-control border-info py-1"
-//                 style={inputStyle}
-//                 name="modifiedBy"
-//                 value={client.modifiedBy}
-//                 onChange={handleChange}
-//                 required
-//               />
-//             </div>
-//           </div>
-
-//           {error && (
-//             <div className="alert alert-danger mt-3" role="alert">
-//               {error}
-//             </div>
-//           )}
-
-//           <div className="d-flex justify-content-end mt-4">
-//             <button
-//               type="button"
-//               className="btn btn-secondary px-4 me-2"
-//               onClick={() => navigate("/clients")}
-//             >
-//               Cancel
-//             </button>
-//             <button className="btn btn-success px-4" type="submit">
-//               {isEdit ? "Update" : "Create"}
-//             </button>
-//           </div>
-//         </form>
-//       </div>
-//     </div>
-//   );
-// }
 import React, { useEffect, useState } from "react";
 import {
   createClient,
@@ -245,7 +5,6 @@ import {
   updateClient,
 } from "../services/clientService";
 import { useNavigate, useParams } from "react-router-dom";
-import statePincodeData from "./statePincodeData.json";
 
 export default function ClientForm() {
   const [client, setClient] = useState({
@@ -264,7 +23,7 @@ export default function ClientForm() {
     modifiedDate: "",
   });
 
-  const [error, setError] = useState("");
+  const [fieldErrors, setFieldErrors] = useState({});
   const navigate = useNavigate();
   const { id } = useParams();
   const isEdit = !!id;
@@ -272,59 +31,77 @@ export default function ClientForm() {
   const getCurrentDate = () => new Date().toISOString().split("T")[0];
 
   useEffect(() => {
+    const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
+
     if (isEdit) {
+      // Edit mode: fetch client and set modifiedBy from localStorage user
       getClientById(id).then((res) => {
         const data = res.data;
         setClient({
           ...data,
           modifiedDate: getCurrentDate(),
+          modifiedBy: loggedInUser?.username || loggedInUser?.email || "",
         });
       });
     } else {
+      // Add mode: set createdDate and createdBy from localStorage user
       setClient((prev) => ({
         ...prev,
         createdDate: getCurrentDate(),
-        modifiedDate: getCurrentDate(),
+        modifiedDate: "",
+        createdBy: loggedInUser?.username || loggedInUser?.email || "",
       }));
     }
   }, [id, isEdit]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    let updatedClient = { ...client, [name]: value };
+    setClient((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+    setFieldErrors((prev) => ({ ...prev, [name]: null }));
+  };
 
-    if (name === "state") {
-      const postal = statePincodeData[value] || "";
-      updatedClient.postalCode = postal;
-    }
+  const validateForm = () => {
+    const requiredFields = isEdit
+      ? [
+          "clientCode",
+          "clientName",
+          "addressLine1",
+          "state",
+          "postalCode",
+          "country",
+          "status",
+          "modifiedBy",
+        ]
+      : [
+          "clientCode",
+          "clientName",
+          "addressLine1",
+          "state",
+          "postalCode",
+          "country",
+          "status",
+          "createdBy",
+        ];
 
-    setClient(updatedClient);
-    setError(""); // clear error on input change
+    const errors = {};
+    requiredFields.forEach((field) => {
+      if (!client[field]) {
+        errors[field] = `${field.replace(/([A-Z])/g, " $1")} is required`;
+      }
+    });
+
+    setFieldErrors(errors);
+    return Object.keys(errors).length === 0;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setFieldErrors({});
 
-    const requiredFields = [
-      "clientCode",
-      "clientName",
-      "addressLine1",
-      "addressLine2",
-      "addressLine3",
-      "state",
-      "country",
-      "postalCode",
-      "status",
-      "createdBy",
-      "modifiedBy",
-    ];
-
-    for (let field of requiredFields) {
-      if (!client[field] || client[field].trim() === "") {
-        setError(`Please fill out the ${field} field.`);
-        return;
-      }
-    }
+    if (!validateForm()) return;
 
     try {
       if (isEdit) {
@@ -334,29 +111,60 @@ export default function ClientForm() {
       }
       navigate("/clients");
     } catch (err) {
+      console.error("Submit error:", err);
       const response = err.response;
 
-      if (response) {
-        const status = response.status;
-        const message =
-          typeof response.data === "string"
-            ? response.data
-            : response.data.message || "Unexpected error occurred.";
-
-        if (status === 409) {
-          setError(message); // Duplicate clientCode
-        } else if ([400, 404, 500].includes(status)) {
-          setError(message); // Validation or server-side issue
-        } else {
-          setError("An unknown error occurred.");
-        }
+      if (response && response.status === 400 && response.data?.errors) {
+        setFieldErrors(response.data.errors);
+      } else if (response) {
+        setFieldErrors({
+          general: `Error ${response.status}: ${response.statusText}`,
+        });
       } else {
-        setError("Server not responding.");
+        setFieldErrors({ general: "An unexpected error occurred." });
       }
     }
   };
 
   const inputStyle = { fontSize: "0.85rem", height: "36px" };
+  const errorStyle = { color: "red", fontSize: "0.75rem" };
+  const requiredAsterisk = (
+    <span style={{ color: "red", marginLeft: "2px" }}>*</span>
+  );
+
+  const allFields = [
+    "clientCode",
+    "clientName",
+    "addressLine1",
+    "addressLine2",
+    "addressLine3",
+    "state",
+    "postalCode",
+    "country",
+    "status",
+  ];
+
+  const requiredFields = isEdit
+    ? [
+        "clientCode",
+        "clientName",
+        "addressLine1",
+        "state",
+        "postalCode",
+        "country",
+        "status",
+        "modifiedBy",
+      ]
+    : [
+        "clientCode",
+        "clientName",
+        "addressLine1",
+        "state",
+        "postalCode",
+        "country",
+        "status",
+        "createdBy",
+      ];
 
   return (
     <div className="container mt-5">
@@ -366,18 +174,11 @@ export default function ClientForm() {
         </h4>
         <form onSubmit={handleSubmit}>
           <div className="row g-3">
-            {[
-              "clientCode",
-              "clientName",
-              "addressLine1",
-              "addressLine2",
-              "addressLine3",
-              "country",
-              "status",
-            ].map((field) => (
+            {allFields.map((field) => (
               <div className="col-md-6" key={field}>
                 <label className="form-label text-muted small text-capitalize">
                   {field}
+                  {requiredFields.includes(field) && requiredAsterisk}
                 </label>
                 <input
                   type="text"
@@ -386,82 +187,59 @@ export default function ClientForm() {
                   name={field}
                   value={client[field]}
                   onChange={handleChange}
-                  required
                 />
+                {fieldErrors[field] && (
+                  <div style={errorStyle}>{fieldErrors[field]}</div>
+                )}
               </div>
             ))}
 
-            {/* State Dropdown */}
-            <div className="col-md-6">
-              <label className="form-label text-muted small">State</label>
-              <select
-                className="form-select border-primary py-1"
-                style={inputStyle}
-                name="state"
-                value={client.state}
-                onChange={handleChange}
-                required
-              >
-                <option value="">-- Select State --</option>
-                {Object.keys(statePincodeData).map((stateName) => (
-                  <option
-                    key={stateName}
-                    value={stateName}
-                    style={{ fontSize: "0.8rem", padding: "4px" }}
-                  >
-                    {stateName}
-                  </option>
-                ))}
-              </select>
-            </div>
+            {/* Created By (only for add) */}
+            {!isEdit && (
+              <div className="col-md-6">
+                <label className="form-label text-muted small">
+                  Created By
+                  {requiredAsterisk}
+                </label>
+                <input
+                  type="text"
+                  className="form-control border-info py-1"
+                  style={inputStyle}
+                  name="createdBy"
+                  value={client.createdBy}
+                  readOnly
+                />
+                {fieldErrors["createdBy"] && (
+                  <div style={errorStyle}>{fieldErrors["createdBy"]}</div>
+                )}
+              </div>
+            )}
 
-            {/* Postal Code */}
-            <div className="col-md-6">
-              <label className="form-label text-muted small">Postal Code</label>
-              <input
-                type="text"
-                className="form-control border-secondary bg-light py-1"
-                style={inputStyle}
-                name="postalCode"
-                value={client.postalCode}
-                readOnly
-                required
-              />
-            </div>
-
-            {/* Created By */}
-            <div className="col-md-6">
-              <label className="form-label text-muted small">Created By</label>
-              <input
-                type="text"
-                className="form-control border-info py-1"
-                style={inputStyle}
-                name="createdBy"
-                value={client.createdBy}
-                onChange={handleChange}
-                required
-                readOnly={isEdit}
-              />
-            </div>
-
-            {/* Modified By */}
-            <div className="col-md-6">
-              <label className="form-label text-muted small">Modified By</label>
-              <input
-                type="text"
-                className="form-control border-info py-1"
-                style={inputStyle}
-                name="modifiedBy"
-                value={client.modifiedBy}
-                onChange={handleChange}
-                required
-              />
-            </div>
+            {/* Modified By (only for edit) */}
+            {isEdit && (
+              <div className="col-md-6">
+                <label className="form-label text-muted small">
+                  Modified By
+                  {requiredAsterisk}
+                </label>
+                <input
+                  type="text"
+                  className="form-control border-info py-1"
+                  style={inputStyle}
+                  name="modifiedBy"
+                  value={client.modifiedBy}
+                  readOnly
+                />
+                {fieldErrors["modifiedBy"] && (
+                  <div style={errorStyle}>{fieldErrors["modifiedBy"]}</div>
+                )}
+              </div>
+            )}
           </div>
 
-          {error && (
+          {fieldErrors.general && (
             <div className="alert alert-danger mt-3" role="alert">
-              {error}
+              {fieldErrors.general}
             </div>
           )}
 

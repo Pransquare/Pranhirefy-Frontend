@@ -4,7 +4,7 @@ const API_BASE_URL = "http://localhost:8080/clients";
 
 export function getClients() {
   // This hits GET /clients/all to get all non-deleted clients
-  return axios.get(`${API_BASE_URL}/all`);
+  return axios.get(`${API_BASE_URL}/getall`);
 }
 
 export function deleteClient(clientId) {
@@ -22,5 +22,5 @@ export function updateClient(clientId, clientData) {
 }
 
 export function getClientById(clientId) {
-  return axios.get(`${API_BASE_URL}/${clientId}`);
+  return axios.get(`${API_BASE_URL}/get/${clientId}`);
 }

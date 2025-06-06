@@ -1,4 +1,3 @@
-// ViewClient.jsx - Styled client detail view
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { getClientById } from "../services/clientService";
@@ -36,10 +35,7 @@ export default function ViewClient() {
 
   return (
     <div className="container mt-5">
-      <div
-        className="card shadow-lg p-4"
-        style={{ maxHeight: "80vh", overflowY: "auto" }}
-      >
+      <div className="card shadow-lg p-4">
         <h2 className="mb-4 text-primary">Client Details</h2>
 
         <div className="row g-3">
@@ -48,7 +44,9 @@ export default function ViewClient() {
               <div className="bg-light border rounded p-3 h-100">
                 <h6 className="text-muted mb-1">{field.label}</h6>
                 <p className="mb-0 fw-semibold text-dark">
-                  {field.value || "N/A"}
+                  {field.value && field.value.toString().trim() !== ""
+                    ? field.value
+                    : "-"}
                 </p>
               </div>
             </div>
