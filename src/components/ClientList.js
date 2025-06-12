@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { getClients, deleteClient } from "../services/clientService"; // updated import path
+import {
+  getClients,
+  deleteClient,
+  searchClients,
+} from "../services/clientService";
 import { useNavigate } from "react-router-dom";
 import { FaEye, FaEdit, FaTrash, FaPlus } from "react-icons/fa";
 import { Modal, Button } from "react-bootstrap";
 import "./ClientList.css";
-
 import NavbarSidebar from "./Sidebar";
-
 import "../DesignationComponent.css";
 
 export default function ClientList() {
@@ -19,52 +21,93 @@ export default function ClientList() {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [selectedClientId, setSelectedClientId] = useState(null);
 
+  const [errorMessage, setErrorMessage] = useState("");
+  const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+  const [successMessage, setSuccessMessage] = useState("");
+
   const navigate = useNavigate();
 
+  // Load all clients (non-deleted) from backend
   const loadClients = () => {
+    setErrorMessage("");
     getClients()
       .then((res) => {
-        console.log("Loaded clients:", res.data);
         setClients(res.data);
         setFilteredClients(res.data);
       })
       .catch((err) => {
         console.error("Error loading clients:", err);
+        setErrorMessage("Failed to load clients.");
+        setClients([]);
+        setFilteredClients([]);
       });
   };
 
+  // Load clients initially
   useEffect(() => {
     loadClients();
   }, []);
 
+  // Search clients with debounce 500ms
   useEffect(() => {
-    const filtered = clients.filter((client) =>
-      client.clientName.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-    setFilteredClients(filtered);
-    setCurrentPage(1);
-  }, [searchTerm, clients]);
+    const delayDebounce = setTimeout(() => {
+      if (searchTerm.trim() === "") {
+        loadClients();
+      } else {
+        setErrorMessage("");
+        searchClients(searchTerm)
+          .then((res) => {
+            setFilteredClients(res.data);
+            setCurrentPage(1);
+          })
+          .catch((err) => {
+            console.error("Error searching clients:", err);
+            const msg =
+              err.response?.data?.message ||
+              "Error searching clients. Please try again.";
+            setErrorMessage(msg);
+            setFilteredClients([]);
+          });
+      }
+    }, 500);
 
+    return () => clearTimeout(delayDebounce);
+  }, [searchTerm]);
+
+  // Open modal to confirm delete
   const openDeleteModal = (id) => {
     setSelectedClientId(id);
     setShowDeleteModal(true);
   };
 
+  // Confirm deletion of client
   const confirmDelete = () => {
     deleteClient(selectedClientId)
-      .then(() => {
+      .then((res) => {
         loadClients();
         setShowDeleteModal(false);
+
+        const backendMsg = res.data?.message || "Client deleted successfully.";
+
+        setSuccessMessage(backendMsg);
+        setShowSuccessMessage(true);
+
+        setTimeout(() => setShowSuccessMessage(false), 2000);
       })
       .catch((err) => {
         console.error("Error deleting client:", err);
+        const error = err.response?.data?.message || "Failed to delete client.";
+        setErrorMessage(error);
       });
   };
 
+  // Clear search input and errors
   const handleClearSearch = () => {
     setSearchTerm("");
+    setErrorMessage("");
   };
 
+  // Pagination logic
   const indexOfLastClient = currentPage * clientsPerPage;
   const indexOfFirstClient = indexOfLastClient - clientsPerPage;
   const currentClients = filteredClients.slice(
@@ -79,6 +122,7 @@ export default function ClientList() {
     }
   };
 
+  // Add padding for fixed footer pagination
   useEffect(() => {
     document.body.style.paddingBottom = "80px";
     return () => {
@@ -118,7 +162,6 @@ export default function ClientList() {
       <table className="table table-bordered">
         <thead>
           <tr>
-            <th>ID</th>
             <th>Code</th>
             <th>Name</th>
             <th>Status</th>
@@ -126,10 +169,24 @@ export default function ClientList() {
           </tr>
         </thead>
         <tbody>
-          {currentClients.length > 0 ? (
+          {errorMessage ? (
+            <tr>
+              <td
+                colSpan="5"
+                className="text-center text-danger fs-5 fw-semibold py-4"
+              >
+                {errorMessage}
+              </td>
+            </tr>
+          ) : currentClients.length === 0 ? (
+            <tr>
+              <td colSpan="5" className="text-center py-4">
+                No clients found.
+              </td>
+            </tr>
+          ) : (
             currentClients.map((c) => (
               <tr key={c.clientId}>
-                <td>{c.clientId}</td>
                 <td>{c.clientCode}</td>
                 <td>{c.clientName}</td>
                 <td>{c.status}</td>
@@ -158,12 +215,6 @@ export default function ClientList() {
                 </td>
               </tr>
             ))
-          ) : (
-            <tr>
-              <td colSpan="5" className="text-center">
-                No clients found.
-              </td>
-            </tr>
           )}
         </tbody>
       </table>
@@ -211,7 +262,16 @@ export default function ClientList() {
         </div>
       )}
 
-      {/* Delete Confirmation Modal */}
+      {/* Success Message Popup */}
+      {showSuccessMessage && (
+        <div
+          className="position-fixed top-0 start-50 translate-middle-x mt-3 px-4 py-2 bg-danger text-white rounded shadow"
+          style={{ zIndex: 1055 }}
+        >
+          {successMessage}
+        </div>
+      )}
+
       <Modal
         show={showDeleteModal}
         onHide={() => setShowDeleteModal(false)}
@@ -220,7 +280,7 @@ export default function ClientList() {
         <Modal.Header closeButton>
           <Modal.Title>Confirm Delete</Modal.Title>
         </Modal.Header>
-        <Modal.Body>
+        <Modal.Body style={{ backgroundColor: "red", color: "white" }}>
           Are you sure you want to delete{" "}
           <strong>
             {clients.find((c) => c.clientId === selectedClientId)?.clientName ||
@@ -228,7 +288,6 @@ export default function ClientList() {
           </strong>
           ?
         </Modal.Body>
-
         <Modal.Footer>
           <Button variant="secondary" onClick={() => setShowDeleteModal(false)}>
             Cancel

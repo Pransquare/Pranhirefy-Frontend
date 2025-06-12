@@ -24,3 +24,6 @@ export function updateClient(clientId, clientData) {
 export function getClientById(clientId) {
   return axios.get(`${API_BASE_URL}/get/${clientId}`);
 }
+export function searchClients(clientName) {
+  return axios.get(`${API_BASE_URL}/search`, { params: { clientName } });
+}
